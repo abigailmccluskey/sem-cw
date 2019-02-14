@@ -3,12 +3,17 @@ package com.napier.sem;
 import java.sql.*;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         // Create new Application
         App a = new App();
 
         // Connect to database
         a.connect();
+        // Get Employee
+        City city = a.getCity(1);
+        // Display results
+        a.displayCity(city);
 
         // Disconnect from database
         a.disconnect();
@@ -61,6 +66,53 @@ public class App {
             } catch (Exception e) {
                 System.out.println("Error closing connection to database");
             }
+        }
+    }
+
+    public City getCity(int ID)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT ID, name, population "
+                            + "FROM city "
+                            + "WHERE ID = " + ID;
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new employee if valid.
+            // Check one is returned
+            if (rset.next())
+            {
+                City city = new City();
+                city.ID = rset.getInt("ID");
+                city.name = rset.getString("name");
+                city.population = rset.getInt("population");
+                return city;
+            }
+            else
+                return null;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get employee details");
+            return null;
+        }
+    }
+
+    public void displayCity(City city)
+    {
+        if (city != null)
+        {
+            System.out.println(
+                    city.ID + " "
+                            + city.name + " "
+                            + city.district + "\n"
+                            + city.CountryCode + "\n"
+                            + city.population);
         }
     }
 }
