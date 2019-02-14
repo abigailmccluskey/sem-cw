@@ -1,6 +1,7 @@
 package com.napier.sem;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class App {
     public static void main(String[] args)
@@ -10,11 +11,10 @@ public class App {
 
         // Connect to database
         a.connect();
-        // Get Employee
-        City city = a.getCity(1);
-        // Display results
-        a.displayCity(city);
 
+        // Extract employee salary information
+        ArrayList<Country> countries = a.populationLtoS();
+        a.displayCountries(countries);
         // Disconnect from database
         a.disconnect();
     }
@@ -69,7 +69,11 @@ public class App {
         }
     }
 
-    public City getCity(int ID)
+    /**
+     * Gets all the current employees and salaries.
+     * @return A list of all employees and salaries, or null if there is an error.
+     */
+    public ArrayList<Country> populationLtoS()
     {
         try
         {
@@ -77,42 +81,47 @@ public class App {
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String strSelect =
-                    "SELECT ID, name, population "
-                            + "FROM city "
-                            + "WHERE ID = " + ID;
+                    "SELECT Name, Continent, Population "
+                            + "FROM country "
+                            + "ORDER BY Population DESC";
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
-            // Return new employee if valid.
-            // Check one is returned
-            if (rset.next())
+            // Extract employee information
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next())
             {
-                City city = new City();
-                city.ID = rset.getInt("ID");
-                city.name = rset.getString("name");
-                city.population = rset.getInt("population");
-                return city;
+                Country country = new Country();
+                country.Name = rset.getString("Name");
+                country.Continent = rset.getString("Continent");
+                country.Population = rset.getInt("Population");
+                countries.add(country);
             }
-            else
-                return null;
+            return countries;
         }
         catch (Exception e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get employee details");
+            System.out.println("Failed to get details");
             return null;
         }
     }
 
-    public void displayCity(City city)
+    /**
+     * Prints a list of countries.
+     * @param countries The list of employees to print.
+     */
+    public void displayCountries(ArrayList<Country> countries)
     {
-        if (city != null)
+        // Print header
+        System.out.println(String.format("%-10s %-15s %-20s", "Name", "Continent", "Population"));
+        // Loop over all employees in the list
+        for (Country country : countries)
         {
-            System.out.println(
-                    city.ID + " "
-                            + city.name + " "
-                            + city.district + "\n"
-                            + city.CountryCode + "\n"
-                            + city.population);
+            String emp_string =
+                    String.format("%-10s %-15s %-20s",
+                            country.Name, country.Continent, country.Population);
+            System.out.println(emp_string);
         }
     }
+
 }
