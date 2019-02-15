@@ -1,0 +1,43 @@
+@startuml
+
+actor CT as "Census Taker"
+rectangle Database as "World Database"
+
+rectangle "World System" {
+    usecase GC1 as "Get population of
+    world."
+    usecase GC2 as "Get all countries on a continent."
+    usecase GC3 as "Get all countries in a region"
+    usecase GC4 as "Get top N populated countries in the world,
+    where N is provided by user."
+    usecase GC5 as "Get top N populated countries in a continent,
+    where N is provided by user."
+
+    usecase OC1 as "Print population of world."
+    usecase OC2 as "Print countries on continent."
+    usecase OC3 as "Print countries in a region."
+    usecase OC4 as "Print N populated countries in the world,
+    where N is provided by the user."
+    usecase OC5 as "Print N populated countries in a continent,
+    where N is provided by the user."
+
+    CT - GC1
+    CT - GC2
+    CT - GC3
+    CT - GC4
+    CT - GC5
+
+    GC1 ..- OC1 : include
+    GC2 ..- OC2 : include
+    GC3 ..- OC3 : include
+    GC4 ..- OC4 : include
+    GC5 ..- OC5 : include
+
+    GC1 - Database
+    GC2 - Database
+    GC3 - Database
+    GC4 - Database
+    GC5 - Database
+}
+
+@enduml
