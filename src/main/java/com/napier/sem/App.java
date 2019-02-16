@@ -12,11 +12,11 @@ public class App {
         // Connect to database
         a.connect();
 
-        // Extract employee salary information
+        //Listing population from largest to smallest
         ArrayList<Country> countries = a.populationLtoS();
         a.displayCountries(countries);
 
-        //Displaying top N countries per continent
+        //Listing top N countries per continent
         int n = 3;
         System.out.println("TOP " + n + " countries per continent:");
         ArrayList<Country> topNContinent = a.topNContinent(n);
@@ -145,9 +145,10 @@ public class App {
                 Statement stmt = con.createStatement();
                 // Create string for SQL statement
                 String strSelect =
-                        "SELECT TOP" + n + "Name, Continent, Population "
+                        "SELECT Name, Continent, Population "
                                 + "FROM country "
-                                + "WHERE Continent = '" + cont +"'";
+                                + "WHERE Continent = '" + cont +"' "
+                                + "ORDER BY Population DESC LIMIT " + n;
                 // Execute SQL statement
                 ResultSet rset = stmt.executeQuery(strSelect);
                 // Extract employee information
