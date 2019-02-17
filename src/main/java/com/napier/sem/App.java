@@ -12,9 +12,16 @@ public class App {
         // Connect to database
         a.connect();
 
-        // Extract employee salary information
+        //Listing population from largest to smallest
         ArrayList<Country> countries = a.populationLtoS();
         a.displayCountries(countries);
+
+        //Listing top N countries per continent
+        int n = 3;
+        System.out.println("TOP " + n + " countries per continent:");
+        ArrayList<Country> topNContinent = a.topNContinent(n);
+        a.displayCountries(topNContinent);
+
         // Disconnect from database
         a.disconnect();
     }
@@ -124,4 +131,46 @@ public class App {
         }
     }
 
+
+    public ArrayList<Country> topNContinent(int n)
+    {
+        try
+        {
+            String [] continents = new String[] {"Asia","Europe","North America","Africa","Oceania","Antarctica","South America"};
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+
+            for(String cont : continents){
+                // Create an SQL statement
+                Statement stmt = con.createStatement();
+                // Create string for SQL statement
+                String strSelect =
+                        "SELECT Name, Continent, Population "
+                                + "FROM country "
+                                + "WHERE Continent = '" + cont +"' "
+                                + "ORDER BY Population DESC LIMIT " + n;
+                // Execute SQL statement
+                ResultSet rset = stmt.executeQuery(strSelect);
+                // Extract employee information
+
+                while (rset.next())
+                {
+                    Country country = new Country();
+                    country.Name = rset.getString("Name");
+                    country.Continent = rset.getString("Continent");
+                    country.Population = rset.getInt("Population");
+                    countries.add(country);
+                }
+            }
+            
+
+            return countries;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
 }
