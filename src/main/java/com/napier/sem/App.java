@@ -15,6 +15,11 @@ public class App {
         // Extract employee salary information
         ArrayList<Country> countries = a.populationLtoS();
         a.displayCountries(countries);
+
+        int n = 5;
+        System.out.println("Top "+n+" countries in the world.");
+        ArrayList<Country> topNcountriesWorld = a.topNWorld(n);
+        a.displayCountries(topNcountriesWorld);
         // Disconnect from database
         a.disconnect();
     }
@@ -106,6 +111,36 @@ public class App {
         }
     }
 
+    public ArrayList<Country> topNWorld(int n)
+    {
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strtopNWorld =
+                    "SELECT Name, Continent, Population "
+                    +"FROM World "
+                    +"ORDER BY Population LIMIT " + n;
+
+            ResultSet rset = stmt.executeQuery(strtopNWorld);
+            ArrayList<Country> topNcountries = new ArrayList<Country>();
+            while(rset.next())
+            {
+                Country country = new Country();
+                country.Name = rset.getString("Name");
+                country.Continent = rset.getString("Continent");
+                country.Population = rset.getInt("Population");
+                topNcountries.add(country);
+            }
+            return topNcountries;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
     /**
      * Prints a list of countries.
      * @param countries The list of employees to print.
@@ -117,10 +152,10 @@ public class App {
         // Loop over all employees in the list
         for (Country country : countries)
         {
-            String emp_string =
+            String cont_string =
                     String.format("%-10s %-15s %-20s",
                             country.Name, country.Continent, country.Population);
-            System.out.println(emp_string);
+            System.out.println(cont_string);
         }
     }
 
