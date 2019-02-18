@@ -118,8 +118,8 @@ public class App {
             Statement stmt = con.createStatement();
             String strtopNWorld =
                     "SELECT Name, Continent, Population "
-                    +"FROM World "
-                    +"ORDER BY Population LIMIT " + n;
+                    +"FROM country "
+                    +"ORDER BY Population DESC LIMIT " + n;
 
             ResultSet rset = stmt.executeQuery(strtopNWorld);
             ArrayList<Country> topNcountries = new ArrayList<Country>();
