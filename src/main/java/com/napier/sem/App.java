@@ -16,14 +16,16 @@ public class App {
         ArrayList<Country> countries = a.populationLtoS();
         a.displayCountries(countries);
 
+        int n; //Limit for SQL statements
+
         //Listing top N countries per continent
-        int n = 3;
+        n = 3;
         System.out.println("TOP " + n + " countries per continent:");
         ArrayList<Country> topNContinent = a.topNContinent(n);
         a.displayCountries(topNContinent);
 
-
-        int n = 5;
+        //Listing top N countries in the world
+        n = 5;
         System.out.println("Top "+n+" countries in the world.");
         ArrayList<Country> topNcountriesWorld = a.topNWorld(n);
         a.displayCountries(topNcountriesWorld);
@@ -81,10 +83,7 @@ public class App {
         }
     }
 
-    /**
-     * Gets all the current employees and salaries.
-     * @return A list of all employees and salaries, or null if there is an error.
-     */
+
     public ArrayList<Country> populationLtoS()
     {
         try
