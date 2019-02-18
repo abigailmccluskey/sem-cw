@@ -5,7 +5,7 @@ public class Country
     public String Code;
     public String Name;
     public String Continent;
-    public String region;
+    public String Region;
     public Float SurfaceArea;
     public Integer IndepYear;
     public int Population;
