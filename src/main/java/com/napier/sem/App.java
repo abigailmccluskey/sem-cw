@@ -29,6 +29,8 @@ public class App {
         System.out.println("Top "+n+" countries in the world.");
         ArrayList<Country> topNcountriesWorld = a.topNWorld(n);
         a.displayCountries(topNcountriesWorld);
+        ArrayList<Country> CountriesContinentsLtoS = a.CountriesContinentLtoS();
+        a.displayCountries(CountriesContinentsLtoS);
         // Disconnect from database
         a.disconnect();
     }
@@ -206,5 +208,51 @@ public class App {
             System.out.println("Failed to get details");
             return null;
         }
+
+
+    }
+
+    public ArrayList<Country> CountriesContinentLtoS()
+    {
+        try
+        {
+            String [] continents = new String[] {"Asia","Europe","North America","Africa","Oceania","Antarctica","South America"};
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+
+            for(String cont : continents){
+                // Create an SQL statement
+                Statement stmt = con.createStatement();
+                // Create string for SQL statement
+                String strSelect =
+                        "SELECT Name, Continent, Population "
+                                + "FROM country "
+                                + "WHERE Continent = '" + cont +"' "
+                                + "ORDER BY Population DESC  " ;
+                // Execute SQL statement
+                ResultSet rset = stmt.executeQuery(strSelect);
+                // Extract employee information
+
+                while (rset.next())
+                {
+                    Country country = new Country();
+                    country.Name = rset.getString("Name");
+                    country.Continent = rset.getString("Continent");
+                    country.Population = rset.getInt("Population");
+                    countries.add(country);
+                }
+            }
+
+
+            return countries;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+
+
     }
 }
