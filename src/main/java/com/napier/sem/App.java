@@ -16,21 +16,12 @@ public class App {
         ArrayList<Country> countries = a.populationLtoS();
         a.displayCountries(countries);
 
-        int n; //Limit for SQL statements
-
         //Listing top N countries per continent
-        n = 3;
+        int n = 3;
         System.out.println("TOP " + n + " countries per continent:");
         ArrayList<Country> topNContinent = a.topNContinent(n);
         a.displayCountries(topNContinent);
 
-        //Listing top N countries in the world
-        n = 5;
-        System.out.println("Top "+n+" countries in the world.");
-        ArrayList<Country> topNcountriesWorld = a.topNWorld(n);
-        a.displayCountries(topNcountriesWorld);
-        ArrayList<Country> CountriesContinentsLtoS = a.CountriesContinentLtoS();
-        a.displayCountries(CountriesContinentsLtoS);
         // Disconnect from database
         a.disconnect();
     }
@@ -85,7 +76,10 @@ public class App {
         }
     }
 
-
+    /**
+     * Gets all the current employees and salaries.
+     * @return A list of all employees and salaries, or null if there is an error.
+     */
     public ArrayList<Country> populationLtoS()
     {
         try
@@ -110,36 +104,6 @@ public class App {
                 countries.add(country);
             }
             return countries;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get details");
-            return null;
-        }
-    }
-
-    public ArrayList<Country> topNWorld(int n)
-    {
-        try
-        {
-            Statement stmt = con.createStatement();
-            String strtopNWorld =
-                    "SELECT Name, Continent, Population "
-                    +"FROM country "
-                    +"ORDER BY Population DESC LIMIT " + n;
-
-            ResultSet rset = stmt.executeQuery(strtopNWorld);
-            ArrayList<Country> topNcountries = new ArrayList<Country>();
-            while(rset.next())
-            {
-                Country country = new Country();
-                country.Name = rset.getString("Name");
-                country.Continent = rset.getString("Continent");
-                country.Population = rset.getInt("Population");
-                topNcountries.add(country);
-            }
-            return topNcountries;
         }
         catch (Exception e)
         {
@@ -198,51 +162,7 @@ public class App {
                     countries.add(country);
                 }
             }
-
-
-            return countries;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get details");
-            return null;
-        }
-
-
-    }
-
-    public ArrayList<Country> CountriesContinentLtoS()
-    {
-        try
-        {
-            String [] continents = new String[] {"Asia","Europe","North America","Africa","Oceania","Antarctica","South America"};
-
-            ArrayList<Country> countries = new ArrayList<Country>();
-
-            for(String cont : continents){
-                // Create an SQL statement
-                Statement stmt = con.createStatement();
-                // Create string for SQL statement
-                String strSelect =
-                        "SELECT Name, Continent, Population "
-                                + "FROM country "
-                                + "WHERE Continent = '" + cont +"' "
-                                + "ORDER BY Population DESC  " ;
-                // Execute SQL statement
-                ResultSet rset = stmt.executeQuery(strSelect);
-                // Extract employee information
-
-                while (rset.next())
-                {
-                    Country country = new Country();
-                    country.Name = rset.getString("Name");
-                    country.Continent = rset.getString("Continent");
-                    country.Population = rset.getInt("Population");
-                    countries.add(country);
-                }
-            }
-
+            
 
             return countries;
         }
@@ -252,7 +172,5 @@ public class App {
             System.out.println("Failed to get details");
             return null;
         }
-
-
     }
 }
