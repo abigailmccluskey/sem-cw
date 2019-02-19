@@ -21,6 +21,9 @@ public class App {
         System.out.println("TOP " + n + " countries per continent:");
         ArrayList<Country> topNContinent = a.topNContinent(n);
         a.displayCountries(topNContinent);
+        System.out.println("All Countries in Region: ");
+        ArrayList<Country>AllCountriesInRegion = a.AllCountriesInRegion();
+        a.displayCountriesByRegion(AllCountriesInRegion);
 
         // Disconnect from database
         a.disconnect();
@@ -131,6 +134,20 @@ public class App {
         }
     }
 
+    public void displayCountriesByRegion(ArrayList<Country> countries)
+    {
+        // Print header
+        System.out.println(String.format("%-10s %-15s %-20s", "Name", "Region", "Population"));
+        // Loop over all employees in the list
+        for (Country country : countries)
+        {
+            String emp_string =
+                    String.format("%-10s %-15s %-20s",
+                            country.Name, country.Region, country.Population);
+            System.out.println(emp_string);
+        }
+    }
+
 
     public ArrayList<Country> topNContinent(int n)
     {
@@ -162,8 +179,43 @@ public class App {
                     countries.add(country);
                 }
             }
-            
 
+
+            return countries;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+    public ArrayList<Country>AllCountriesInRegion()
+    {
+        try {
+            String[] continents = new String[]{"Asia", "Europe", "North America", "Africa", "Oceania", "Antarctica", "South America"};
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+
+                    "SELECT Name, Region, Population "
+                            + "FROM country "
+                            + "ORDER BY Region, Population DESC ";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+
+            while (rset.next())
+            {
+                Country country = new Country();
+                country.Name = rset.getString("Name");
+                country.Region = rset.getString("Region");
+                country.Population = rset.getInt("Population");
+                countries.add(country);
+            }
             return countries;
         }
         catch (Exception e)
