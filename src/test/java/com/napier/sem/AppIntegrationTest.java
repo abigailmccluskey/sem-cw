@@ -22,7 +22,7 @@ public class AppIntegrationTest
     @Test
     void testPopulationLtoS()
     {
-        ArrayList<Country> countries = app.populationLtoS();
+        ArrayList<Country> countries = app.worldLtoS();
         Country country = countries.get(0);
 
         int a = 1277558000;
