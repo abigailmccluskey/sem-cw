@@ -47,16 +47,20 @@ public class AppTest
         countries.add(country);
         app.displayCountries(countries);
     }
-   /* @Test
+    @Test
     void testTopNContinent()
     {
         ArrayList<Country> countries = app.topNContinent(3);
         Country country = countries.get(0);
-        int a = 0;
-        int b = country.Population;
+        String a = "China";
+        String b = country.Name;
+        assertEquals(a, b);
+
+        country = countries.get(countries.size()-1);
+        a = "Argentina";
+        b = country.Name;
         assertEquals(a, b);
     }
-*/
 
     @Test
     void displayCountriesByRegion()
