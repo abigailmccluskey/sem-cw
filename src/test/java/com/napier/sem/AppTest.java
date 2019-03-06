@@ -36,6 +36,17 @@ public class AppTest
 
     }
 
+    @Test
+    void displayCountries()
+    {
+        ArrayList<Country> countries = new ArrayList<>();
+        Country country = new Country();
+        country.Name = "Scotland";
+        country.Population = 100000;
+        country.Continent = "Europe";
+        countries.add(country);
+        app.displayCountries(countries);
+    }
    /* @Test
     void testTopNContinent()
     {
@@ -47,4 +58,15 @@ public class AppTest
     }
 */
 
+    @Test
+    void displayCountriesByRegion()
+    {
+        ArrayList<Country> countries = new ArrayList<>();
+        Country country = new Country();
+        country.Name = "Scotland";
+        country.Population = 100000;
+        country.Continent = "Europe";
+        countries.add(country);
+        app.displayCountriesByRegion(countries);
+    }
 }
