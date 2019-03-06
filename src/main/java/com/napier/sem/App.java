@@ -30,8 +30,10 @@ public class App {
         ArrayList<Country> topNContinent = a.topNContinent(n);
         a.displayCountries(topNContinent);
 
-        System.out.println("\nAll Countries in Region: ");
-        ArrayList<Country>AllCountriesInRegion = a.AllCountriesInRegion();
+        //Listing all countries in a region
+        String region = "Eastern Europe";
+        System.out.println("\nAll Countries in" + region + ": ");
+        ArrayList<Country>AllCountriesInRegion = a.AllCountriesInRegion(region);
         a.displayCountriesByRegion(AllCountriesInRegion);
 
         // Disconnect from database
@@ -209,10 +211,9 @@ public class App {
             return null;
         }
     }
-    public ArrayList<Country>AllCountriesInRegion()
+    public ArrayList<Country>AllCountriesInRegion(String region)
     {
         try {
-            String[] continents = new String[]{"Asia", "Europe", "North America", "Africa", "Oceania", "Antarctica", "South America"};
 
             ArrayList<Country> countries = new ArrayList<Country>();
 
@@ -223,7 +224,8 @@ public class App {
 
                     "SELECT Name, Region, Population "
                             + "FROM country "
-                            + "ORDER BY Region, Population DESC ";
+                            + "WHERE Region = '" + region +"' "
+                            + "ORDER BY Population DESC ";
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
 
