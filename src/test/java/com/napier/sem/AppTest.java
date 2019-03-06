@@ -34,11 +34,20 @@ public class AppTest
     void displayCountriesByRegion()
     {
         ArrayList<Country> countries = new ArrayList<>();
-        Country country = new Country();
-        country.Name = "Scotland";
-        country.Population = 100000;
-        country.Continent = "Europe";
-        countries.add(country);
+        Country country1 = new Country();
+        Country country2 = new Country();
+        country1.Name = "Scotland";
+        country1.Population = 100000;
+        country1.Continent = "Europe";
+        country1.Region = "Northern Europe";
+
+        country2.Name = "England";
+        country2.Population = 1000000;
+        country2.Continent = "Europe";
+        country2.Region = "Northern Europe";
+
+        countries.add(country1);
+        countries.add(country2);
         app.displayCountriesByRegion(countries);
     }
 
