@@ -12,7 +12,7 @@ public class App {
         // Connect to database
         if (args.length < 1)
         {
-            a.connect("localhost:33060");
+            a.connect("localhost:3306");
         }
         else
         {
@@ -20,18 +20,15 @@ public class App {
         }
 
         //Listing population from largest to smallest
-        System.out.println("\nListing population from largest to smallest");
         ArrayList<Country> countries = a.populationLtoS();
         a.displayCountries(countries);
 
         //Listing top N countries per continent
         int n = 3;
-        System.out.println("\nTOP " + n + " countries per continent:");
+        System.out.println("TOP " + n + " countries per continent:");
         ArrayList<Country> topNContinent = a.topNContinent(n);
         a.displayCountries(topNContinent);
-
-        //Listing top N countries per region
-        System.out.println("\nAll Countries in Region: ");
+        System.out.println("All Countries in Region: ");
         ArrayList<Country>AllCountriesInRegion = a.AllCountriesInRegion();
         a.displayCountriesByRegion(AllCountriesInRegion);
 
