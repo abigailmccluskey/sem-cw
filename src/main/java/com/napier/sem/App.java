@@ -44,6 +44,10 @@ public class App {
         ArrayList<City> citiesInWorldLtoS = a.citiesInWorldLtoS();
         a.displayCities(citiesInWorldLtoS);
 
+        String continent = "Africa";
+        ArrayList<City> citiesInContinentLtoS = a.CitiesOnContinentLtoS(continent);
+        a.displayCities(citiesInContinentLtoS);
+
         // Disconnect from database
         a.disconnect();
     }
@@ -335,6 +339,49 @@ public class App {
 
 
             return countries;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+
+
+    }
+
+    public ArrayList<City> CitiesOnContinentLtoS(String continent)
+    {
+        try
+        {
+            String [] continents = new String[] {"Asia","Europe","North America","Africa","Oceania","Antarctica","South America"};
+
+            ArrayList<City> cities = new ArrayList<>();
+
+            for(String cont : continents){
+                // Create an SQL statement
+                Statement stmt = con.createStatement();
+                // Create string for SQL statement
+                String strSelect =
+                        "SELECT city.Name, city.District, city.Population "
+                                + "FROM city, country "
+                                + "WHERE country.Continent = '" + continent +"' "
+                                + "AND country.Code = city.CountryCode "
+                                + "ORDER BY Population DESC  " ;
+                // Execute SQL statement
+                ResultSet rset = stmt.executeQuery(strSelect);
+                // Extract employee information
+
+                while (rset.next())
+                {
+                    City city = new City();
+                    city.name = rset.getString("city.Name");
+                    city.district = rset.getString("city.District");
+                    city.population = rset.getInt("city.Population");
+                    cities.add(city);
+                }
+            }
+            return cities;
         }
         catch (Exception e)
         {
