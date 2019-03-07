@@ -63,4 +63,30 @@ public class AppIntegrationTest
         String d = country.Region;
         assertEquals(c, d);
     }
+
+    @Test
+    void AllCityInRegionLtoS(){
+        ArrayList<City> cities = app.AllCityInRegionLtoS("Eastern Europe");
+        City city = cities.get(0);
+        int a = 8389200;
+        int b = city.population;
+        assertEquals(a, b);
+
+        String c = "Moscow";
+        String d = city.name;
+        assertEquals(c, d);
+    }
+
+    @Test
+    void AllCityInCountryLtoS(){
+        ArrayList<City> cities = app.AllCityInCountryLtoS("South Africa");
+        City city = cities.get(0);
+        int a = 2352121;
+        int b = city.population;
+        assertEquals(a, b);
+
+        String c = "Cape Town";
+        String d = city.name;
+        assertEquals(c, d);
+    }
 }
