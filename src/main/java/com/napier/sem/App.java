@@ -34,20 +34,36 @@ public class App {
 
         //Listing top N countries in the world
         n = 5;
-        System.out.println("Top "+n+" countries in the world.");
+        System.out.println("\nTop "+n+" countries in the world.");
         ArrayList<Country> topNcountriesWorld = a.topNWorld(n);
         a.displayCountries(topNcountriesWorld);
 
         ArrayList<Country> CountriesContinentsLtoS = a.CountriesContinentLtoS();
         a.displayCountries(CountriesContinentsLtoS);
 
+        //Listing all cities in the world
+        System.out.println("\nListing all cities in the world");
         ArrayList<City> citiesInWorldLtoS = a.citiesInWorldLtoS();
         a.displayCities(citiesInWorldLtoS);
 
+        //Listing all cities in a continent
         String continent = "Africa";
+        System.out.println("\nListing all cities in " + continent);
         ArrayList<City> citiesInContinentLtoS = a.CitiesOnContinentLtoS(continent);
         a.displayCities(citiesInContinentLtoS);
 
+        //Listing all cities in a region
+        region = "Eastern Europe";
+        System.out.println("\nListing all cities in " + region);
+        ArrayList<City> citiesInRegion = a.AllCityInRegionLtoS(region);
+        a.displayCities(citiesInRegion);
+
+
+        //Listing all cities in a country
+        String country = "South Africa";
+        System.out.println("\nListing all cities in " + country);
+        ArrayList<City> CityInCountry = a.AllCityInCountryLtoS(country);
+        a.displayCities(CityInCountry);
         // Disconnect from database
         a.disconnect();
     }
@@ -389,8 +405,80 @@ public class App {
             System.out.println("Failed to get details");
             return null;
         }
+    }
 
+    public ArrayList<City>AllCityInRegionLtoS(String region)
+    {
+        try {
 
+            ArrayList<City> cities = new ArrayList<City>();
+
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+
+                    "SELECT city.Name, city.District, city.Population "
+                            + "FROM city, country "
+                            + "WHERE country.Region = '" + region +"' "
+                            + "AND  city.CountryCode = country.Code "
+                            + "ORDER BY Population DESC ";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+
+            while (rset.next())
+            {
+                City city = new City();
+                city.name = rset.getString("city.Name");
+                city.district = rset.getString("city.District");
+                city.population = rset.getInt("city.Population");
+                cities.add(city);
+            }
+            return cities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City>AllCityInCountryLtoS(String country)
+    {
+        try {
+
+            ArrayList<City> cities = new ArrayList<City>();
+
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+
+                    "SELECT city.Name, city.District, city.Population "
+                            + "FROM city, country "
+                            + "WHERE country.Name = '" + country +"' "
+                            + "AND  city.CountryCode = country.Code "
+                            + "ORDER BY Population DESC ";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+
+            while (rset.next())
+            {
+                City city = new City();
+                city.name = rset.getString("city.Name");
+                city.district = rset.getString("city.District");
+                city.population = rset.getInt("city.Population");
+                cities.add(city);
+            }
+            return cities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
     }
 
 }
