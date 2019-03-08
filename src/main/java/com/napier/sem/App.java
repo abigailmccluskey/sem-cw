@@ -38,7 +38,9 @@ public class App {
         ArrayList<Country> topNcountriesWorld = a.topNWorld(n);
         a.displayCountries(topNcountriesWorld);
 
-        ArrayList<Country> CountriesContinentsLtoS = a.CountriesContinentLtoS();
+        String continent = "Europe";
+        System.out.println("Listing all countries on a continent.");
+        ArrayList<Country> CountriesContinentsLtoS = a.CountriesContinentLtoS(continent);
         a.displayCountries(CountriesContinentsLtoS);
 
         //Listing all cities in the world
@@ -47,7 +49,7 @@ public class App {
         a.displayCities(citiesInWorldLtoS);
 
         //Listing all cities in a continent
-        String continent = "Africa";
+        continent = "Africa";
         System.out.println("\nListing all cities in " + continent);
         ArrayList<City> citiesInContinentLtoS = a.CitiesOnContinentLtoS(continent);
         a.displayCities(citiesInContinentLtoS);
@@ -322,7 +324,7 @@ public class App {
         }
     }
 
-    public ArrayList<Country> CountriesContinentLtoS()
+    public ArrayList<Country> CountriesContinentLtoS(String passedCountry)
     {
         try
         {
@@ -337,7 +339,7 @@ public class App {
                 String strSelect =
                         "SELECT Name, Continent, Population "
                                 + "FROM country "
-                                + "WHERE Continent = '" + cont +"' "
+                                + "WHERE Continent = '" + passedCountry +"' "
                                 + "ORDER BY Population DESC  " ;
                 // Execute SQL statement
                 ResultSet rset = stmt.executeQuery(strSelect);

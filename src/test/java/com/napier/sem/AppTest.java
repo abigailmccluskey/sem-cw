@@ -51,4 +51,16 @@ public class AppTest
         app.displayCountriesByRegion(countries);
     }
 
+    @Test
+    void displayCitiesTest()
+    {
+        ArrayList<City> cities = new ArrayList<>();
+        City city1 = new City();
+        city1.name = "Edinburgh";
+        city1.district = "West Lothian";
+        city1.population = 100000;
+
+        cities.add(city1);
+        app.displayCities(cities);
+    }
 }

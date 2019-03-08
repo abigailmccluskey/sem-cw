@@ -89,4 +89,61 @@ public class AppIntegrationTest
         String d = city.name;
         assertEquals(c, d);
     }
+
+    @Test
+    void CitiesOnContinentLtoS()
+    {
+        ArrayList<City> cities = app.CitiesOnContinentLtoS("Africa");
+
+        int a = 6789479;
+        int b = cities.get(0).population;
+        assertEquals(a, b);
+
+        String c = "Cairo";
+        String d = cities.get(0).name;
+
+        assertEquals(c, d);
+    }
+
+    @Test
+    void CountriesContinentLtoS()
+    {
+        ArrayList<Country> countries = app.CountriesContinentLtoS("Europe");
+
+        String a = "Russian Federation";
+        String b = countries.get(0).Name;
+
+        Integer c = 146934000;
+        Integer d = countries.get(0).Population;
+
+        assertEquals(a, b);
+        assertEquals(c, d);
+    }
+
+    @Test
+    void TopNWorld()
+    {
+        ArrayList<Country> countries = app.topNWorld(5);
+        String a = "China";
+        String b = countries.get(0).Name;
+        assertEquals(a, b);
+
+        Integer c = 1277558000;
+        Integer d = countries.get(0).Population;
+    }
+
+    @Test
+    void citiesInWorldLtoS()
+    {
+        ArrayList<City> cities = app.citiesInWorldLtoS();
+
+        int a = 9981619;
+        int b = cities.get(1).population;
+        assertEquals(a, b);
+
+        String c = "Seoul";
+        String d = cities.get(1).name;
+
+        assertEquals(c, d);
+    }
 }
