@@ -1,5 +1,5 @@
 @startuml
-
+top to bottom direction
 actor CT as "Census Taker"
 rectangle Database as "World Database"
 
