@@ -146,4 +146,30 @@ public class AppIntegrationTest
 
         assertEquals(c, d);
     }
+
+    @Test
+    void TopNpopulatedCities()
+    {
+        ArrayList<City> city = app.topNpopulatedCities(4);
+        String a = "Mumbai (Bombay)";
+        String b = city.get(0).name;
+        assertEquals(a, b);
+
+        Integer c = 10500000;
+        Integer d = city.get(0).population;
+    }
+
+    @Test
+    void TopNpopulatedCitiesInContinent()
+    {
+        ArrayList<City> city = app.topNpopulatedCitiesInContinent(5);
+        String a = "Mumbai (Bombay)";
+        String b = city.get(0).name;
+        assertEquals(a, b);
+
+        Integer c = 10500000;
+        Integer d = city.get(0).population;
+    }
+
+
 }
