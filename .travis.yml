@@ -107,6 +107,7 @@ stages:
 after_success:
   # Push code coverage data to codecov.
   - bash <(curl -s https://codecov.io/bash)
+
 before_install:
 - openssl aes-256-cbc -K $encrypted_09679221e033_key -iv $encrypted_09679221e033_iv
   -in client-secret.json.enc -out client-secret.json -d
