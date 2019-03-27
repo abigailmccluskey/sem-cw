@@ -146,4 +146,60 @@ public class AppIntegrationTest
 
         assertEquals(c, d);
     }
+
+    @Test
+    void topNCitiesDistrict()
+    {
+        ArrayList<City> cities = app.topNCitiesDistrict(3, "Western Cape");
+
+        int a = 2352121;
+        int b = cities.get(0).population;
+        assertEquals(a, b);
+
+        String c = "Cape Town";
+        String d = cities.get(0).name;
+
+        assertEquals(c, d);
+    }
+
+    @Test
+    void topNCitiesRegion()
+    {
+        ArrayList<City> cities = app.topNCitiesRegion(3, "Eastern Europe");
+
+        int a = 8389200;
+        int b = cities.get(0).population;
+        assertEquals(a, b);
+
+        String c = "Moscow";
+        String d = cities.get(0).name;
+
+        assertEquals(c, d);
+    }
+
+    @Test
+    void TopNpopulatedCities()
+    {
+        ArrayList<City> city = app.topNpopulatedCities(4);
+        String a = "Mumbai (Bombay)";
+        String b = city.get(0).name;
+        assertEquals(a, b);
+
+        Integer c = 10500000;
+        Integer d = city.get(0).population;
+    }
+
+    @Test
+    void TopNpopulatedCitiesInContinent()
+    {
+        ArrayList<City> city = app.topNpopulatedCitiesInContinent(5);
+        String a = "Mumbai (Bombay)";
+        String b = city.get(0).name;
+        assertEquals(a, b);
+
+        Integer c = 10500000;
+        Integer d = city.get(0).population;
+    }
+
+
 }

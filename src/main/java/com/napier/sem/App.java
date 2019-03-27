@@ -66,6 +66,29 @@ public class App {
         System.out.println("\nListing all cities in " + country);
         ArrayList<City> CityInCountry = a.AllCityInCountryLtoS(country);
         a.displayCities(CityInCountry);
+
+        n=3;
+        ArrayList<City> topNpopulatedCities = a.topNpopulatedCities(n);
+        a.displayCities(topNpopulatedCities);
+
+        n=3;
+        ArrayList<City> topNpopulatedCitiesInContinent = a.topNpopulatedCitiesInContinent(n);
+        a.displayCities(topNpopulatedCitiesInContinent);
+
+
+        //Listing all cities in a district
+        n = 3;
+        String district = "Western Cape";
+        System.out.println("\nListing top " + n + " cities in " + district);
+        ArrayList<City> topNCitiesDistrict= a.topNCitiesDistrict(n,district);
+        a.displayCities(topNCitiesDistrict);
+
+        //Listing all cities in a region
+        region = "Eastern Europe";
+        n = 3;
+        System.out.println("\nListing Top " + n + " cities in " + region);
+        ArrayList<City> topNCitiesRegion= a.topNCitiesRegion(n,region);
+        a.displayCities(topNCitiesRegion);
         // Disconnect from database
         a.disconnect();
     }
@@ -483,4 +506,134 @@ public class App {
         }
     }
 
+
+    public ArrayList<City>topNpopulatedCities(int n)
+    {
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strtopNWorld =
+                    "SELECT Name, District,Population "
+                            +"FROM city "
+                            +"ORDER BY Population DESC LIMIT " + n;
+
+            ResultSet rset = stmt.executeQuery(strtopNWorld);
+            ArrayList<City> topNpopulationCities = new ArrayList<City>();
+            while(rset.next())
+            {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                topNpopulationCities.add(city);
+            }
+            return topNpopulationCities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City>topNpopulatedCitiesInContinent(int n)
+    {
+        try
+        {
+
+            String[] continents = new String[]{"Asia", "Europe", "North America", "Africa", "Oceania", "Antarctica", "South America"};
+            ArrayList<City> topNpopulationCities = new ArrayList<City>();
+
+            for (String cont : continents)
+            {
+                Statement stmt = con.createStatement();
+                String strtopNWorld =
+                        "SELECT city.Name,city.District, city.Population "
+                                + "FROM city,country "
+                                + "WHERE Continent = '" + cont+"' "
+                                + "AND city.CountryCode = country.code "
+                                + "ORDER BY Population DESC LIMIT " + n;
+
+                ResultSet rset = stmt.executeQuery(strtopNWorld);
+
+                while (rset.next()) {
+                    City city = new City();
+                    city.name = rset.getString("Name");
+                    city.district=rset.getString("District");
+                    city.population = rset.getInt("Population");
+                    topNpopulationCities.add(city);
+                }
+            }
+            return topNpopulationCities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+    public ArrayList<City> topNCitiesDistrict(int n, String district)
+    {
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strtopNWorld =
+                    "SELECT Name, District, Population "
+                            +"FROM city "
+                            +"WHERE District = '" + district +"' "
+                            +"ORDER BY Population DESC LIMIT " + n;
+
+            ResultSet rset = stmt.executeQuery(strtopNWorld);
+            ArrayList<City> topNcites = new ArrayList<City>();
+            while(rset.next())
+            {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                topNcites.add(city);
+            }
+            return topNcites;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> topNCitiesRegion(int n, String region)
+    {
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strtopNWorld =
+                    "SELECT city.Name, city.District, city.Population "
+                            + "FROM city, country "
+                            + "WHERE Region = '" + region + "' "
+                            + "AND city.CountryCode = country.Code "
+                            + "ORDER BY Population DESC LIMIT " + n;
+
+            ResultSet rset = stmt.executeQuery(strtopNWorld);
+            ArrayList<City> topNcites = new ArrayList<City>();
+            while(rset.next())
+            {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                topNcites.add(city);
+            }
+            return topNcites;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
 }
