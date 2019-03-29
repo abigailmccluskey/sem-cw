@@ -50,8 +50,8 @@ jobs:
         - mvn package -DskipTests=true -Dmaven.javadoc.skip=true
       before_deploy:
         # Set our Git user name and email.
-        - git config --local user.name "Kevin Chalmers"
-        - git config --local user.email "k.chalmers@napier.ac.uk"
+        - git config --local user.name "David McCluskey"
+        - git config --local user.email "davidmccluskey1@gmail.com"
         # Create unique tag for the commit.
         - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y-%m-%d')-$(git log --format=%h -1)}
         # Tag the commit.
@@ -78,7 +78,7 @@ jobs:
         - gcloud auth activate-service-account --key-file client-secret.json
       script:
         # Set the project we will work in.
-        - gcloud config set project semethods-235016
+        - gcloud config set project sem-cw-235814
         # Set the zone to work in.
         - gcloud config set compute/zone europe-west2-b
         # Assign project ID to a variable to make life easier
