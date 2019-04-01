@@ -107,6 +107,11 @@ public class App {
         ArrayList<City> ContCapLtoS = a.CapitalsContinentLtoS(continent);
         a.displayCitiesByCountry(ContCapLtoS);
 
+        //Listing the capital city for each country in a region from largest to smallest
+        region = "Western Europe";
+        System.out.println("\nListing all capital cities in " + region + " from largest population to smallest");
+        ArrayList<City> RegionCapLtoS = a.CapitalsRegionLtoS(region);
+        a.displayCities(RegionCapLtoS);
         // Disconnect from database
         a.disconnect();
     }
@@ -758,4 +763,34 @@ public class App {
         }
     }
 
+    public ArrayList<City> CapitalsRegionLtoS(String region){
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strLtoS =
+                    "SELECT city.Name, District, city.Population "
+                            + "FROM city,country "
+                            + "WHERE Region = '" + region + "' "
+                            + "AND city.CountryCode = country.Code "
+                            + "ORDER BY Population DESC";
+
+            ResultSet rset = stmt.executeQuery(strLtoS);
+            ArrayList<City> LtoS = new ArrayList<City>();
+            while(rset.next())
+            {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                LtoS.add(city);
+            }
+            return LtoS;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
 }
