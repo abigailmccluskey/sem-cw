@@ -89,7 +89,7 @@ public class App {
         System.out.println("\nListing Top " + n + " cities in " + region);
         ArrayList<City> topNCitiesRegion= a.topNCitiesRegion(n,region);
         a.displayCities(topNCitiesRegion);
-
+/*
         //Listing Top N Capital Cities
         n = 5;
         System.out.println("\nListing Top " + n + " cities in the world.");
@@ -99,6 +99,14 @@ public class App {
         System.out.println("Listing all capital cities from largest population to smallest.");
         ArrayList<City> CitiesLtoS = a.citiesInWorldLtoS();
         a.displayCities(CitiesLtoS);
+
+        */
+        //Listing the capital city for each country in a continent from largest to smallest
+        continent = "Europe";
+        System.out.println("\nListing all capital cities in " + continent + " from largest population to smallest");
+        ArrayList<City> ContCapLtoS = a.CapitalsContinentLtoS(continent);
+        a.displayCitiesByCountry(ContCapLtoS);
+
         // Disconnect from database
         a.disconnect();
     }
@@ -215,6 +223,17 @@ public class App {
         }
     }
 
+    public void displayCitiesByCountry(ArrayList<City> cities) {
+        // Print header
+        System.out.println(String.format("%-10s %-15s %-20s", "Name", "Country Code", "Population"));
+        // Loop over all employees in the list
+        for (City city : cities) {
+            String emp_string =
+                    String.format("%-10s %-15s %-20s",
+                            city.name, city.CountryCode, city.population);
+            System.out.println(emp_string);
+        }
+    }
 
     public ArrayList<Country> topNContinent(int n) {
         try {
@@ -707,4 +726,36 @@ public class App {
             return null;
         }
     }
+
+    public ArrayList<City> CapitalsContinentLtoS(String cont){
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strLtoS =
+                    "SELECT city.Name, CountryCode, city.Population "
+                            + "FROM city,country "
+                            + "WHERE Continent = '" + cont + "' "
+                            + "AND city.ID = country.Capital "
+                            + "ORDER BY Population DESC";
+
+            ResultSet rset = stmt.executeQuery(strLtoS);
+            ArrayList<City> LtoS = new ArrayList<City>();
+            while(rset.next())
+            {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.CountryCode = rset.getString("CountryCode");
+                city.population = rset.getInt("Population");
+                LtoS.add(city);
+            }
+            return LtoS;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
 }
