@@ -34,7 +34,7 @@ public class App {
 
         //Listing top N countries in the world
         n = 5;
-        System.out.println("\nTop "+n+" countries in the world.");
+        System.out.println("\nTop " + n + " countries in the world.");
         ArrayList<Country> topNcountriesWorld = a.topNWorld(n);
         a.displayCountries(topNcountriesWorld);
 
@@ -67,11 +67,11 @@ public class App {
         ArrayList<City> CityInCountry = a.AllCityInCountryLtoS(country);
         a.displayCities(CityInCountry);
 
-        n=3;
+        n = 3;
         ArrayList<City> topNpopulatedCities = a.topNpopulatedCities(n);
         a.displayCities(topNpopulatedCities);
 
-        n=3;
+        n = 3;
         ArrayList<City> topNpopulatedCitiesInContinent = a.topNpopulatedCitiesInContinent(n);
         a.displayCities(topNpopulatedCitiesInContinent);
 
@@ -80,19 +80,19 @@ public class App {
         n = 3;
         String district = "Western Cape";
         System.out.println("\nListing top " + n + " cities in " + district);
-        ArrayList<City> topNCitiesDistrict= a.topNCitiesDistrict(n,district);
+        ArrayList<City> topNCitiesDistrict = a.topNCitiesDistrict(n, district);
         a.displayCities(topNCitiesDistrict);
 
         //Listing all cities in a region
         region = "Eastern Europe";
         n = 3;
         System.out.println("\nListing Top " + n + " cities in " + region);
-        ArrayList<City> topNCitiesRegion= a.topNCitiesRegion(n,region);
+        ArrayList<City> topNCitiesRegion = a.topNCitiesRegion(n, region);
         a.displayCities(topNCitiesRegion);
 
         //Listing Top N Capital Cities
         n = 5;
-        System.out.println("\nListing Top " + n + " cities in the world.");
+        System.out.println("\nListing Top " + n + " capital cities in the world.");
         ArrayList<City> topNCitiesWorld = a.topNCapitalWorld(n);
         a.displayCities(topNCitiesWorld);
 
@@ -112,6 +112,16 @@ public class App {
         System.out.println("\nListing all capital cities in " + region + " from largest population to smallest");
         ArrayList<City> RegionCapLtoS = a.CapitalsRegionLtoS(region);
         a.displayCities(RegionCapLtoS);
+
+        n=3;
+        ArrayList<City> topNpopulatedCitiesCoun = a.topNpopulatedCitiesInCountry(n, "Germany");
+        a.displayCities(topNpopulatedCitiesCoun);
+
+        //Listing all cities in a district
+        System.out.println("\nListing all cities in the district");
+        ArrayList<City> AllCityInDistrictLtoS= a.AllCityInDistrictLtoS("Zuid-Holland");
+        a.displayCities(AllCityInDistrictLtoS);
+
         //Disconnect from database
         a.disconnect();
     }
@@ -309,8 +319,7 @@ public class App {
         }
     }
 
-    public ArrayList<City> citiesInWorldLtoS()
-    {
+    public ArrayList<City> citiesInWorldLtoS() {
 
         try {
             // Create an SQL statement
@@ -351,20 +360,17 @@ public class App {
         }
     }
 
-    public ArrayList<Country> topNWorld(int n)
-    {
-        try
-        {
+    public ArrayList<Country> topNWorld(int n) {
+        try {
             Statement stmt = con.createStatement();
             String strtopNWorld =
                     "SELECT Name, Continent, Population "
-                            +"FROM country "
-                            +"ORDER BY Population DESC LIMIT " + n;
+                            + "FROM country "
+                            + "ORDER BY Population DESC LIMIT " + n;
 
             ResultSet rset = stmt.executeQuery(strtopNWorld);
             ArrayList<Country> topNcountries = new ArrayList<Country>();
-            while(rset.next())
-            {
+            while (rset.next()) {
                 Country country = new Country();
                 country.Name = rset.getString("Name");
                 country.Continent = rset.getString("Continent");
@@ -372,38 +378,33 @@ public class App {
                 topNcountries.add(country);
             }
             return topNcountries;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get details");
             return null;
         }
     }
 
-    public ArrayList<Country> CountriesContinentLtoS(String passedCountry)
-    {
-        try
-        {
-            String [] continents = new String[] {"Asia","Europe","North America","Africa","Oceania","Antarctica","South America"};
+    public ArrayList<Country> CountriesContinentLtoS(String passedCountry) {
+        try {
+            String[] continents = new String[]{"Asia", "Europe", "North America", "Africa", "Oceania", "Antarctica", "South America"};
 
             ArrayList<Country> countries = new ArrayList<Country>();
 
-            for(String cont : continents){
+            for (String cont : continents) {
                 // Create an SQL statement
                 Statement stmt = con.createStatement();
                 // Create string for SQL statement
                 String strSelect =
                         "SELECT Name, Continent, Population "
                                 + "FROM country "
-                                + "WHERE Continent = '" + passedCountry +"' "
-                                + "ORDER BY Population DESC  " ;
+                                + "WHERE Continent = '" + passedCountry + "' "
+                                + "ORDER BY Population DESC  ";
                 // Execute SQL statement
                 ResultSet rset = stmt.executeQuery(strSelect);
                 // Extract employee information
 
-                while (rset.next())
-                {
+                while (rset.next()) {
                     Country country = new Country();
                     country.Name = rset.getString("Name");
                     country.Continent = rset.getString("Continent");
@@ -414,9 +415,7 @@ public class App {
 
 
             return countries;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get details");
             return null;
@@ -425,30 +424,27 @@ public class App {
 
     }
 
-    public ArrayList<City> CitiesOnContinentLtoS(String continent)
-    {
-        try
-        {
-            String [] continents = new String[] {"Asia","Europe","North America","Africa","Oceania","Antarctica","South America"};
+    public ArrayList<City> CitiesOnContinentLtoS(String continent) {
+        try {
+            String[] continents = new String[]{"Asia", "Europe", "North America", "Africa", "Oceania", "Antarctica", "South America"};
 
             ArrayList<City> cities = new ArrayList<>();
 
-            for(String cont : continents){
+            for (String cont : continents) {
                 // Create an SQL statement
                 Statement stmt = con.createStatement();
                 // Create string for SQL statement
                 String strSelect =
                         "SELECT city.Name, city.District, city.Population "
                                 + "FROM city, country "
-                                + "WHERE country.Continent = '" + continent +"' "
+                                + "WHERE country.Continent = '" + continent + "' "
                                 + "AND country.Code = city.CountryCode "
-                                + "ORDER BY Population DESC  " ;
+                                + "ORDER BY Population DESC  ";
                 // Execute SQL statement
                 ResultSet rset = stmt.executeQuery(strSelect);
                 // Extract employee information
 
-                while (rset.next())
-                {
+                while (rset.next()) {
                     City city = new City();
                     city.name = rset.getString("city.Name");
                     city.district = rset.getString("city.District");
@@ -457,17 +453,14 @@ public class App {
                 }
             }
             return cities;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get details");
             return null;
         }
     }
 
-    public ArrayList<City>AllCityInRegionLtoS(String region)
-    {
+    public ArrayList<City> AllCityInRegionLtoS(String region) {
         try {
 
             ArrayList<City> cities = new ArrayList<City>();
@@ -479,14 +472,13 @@ public class App {
 
                     "SELECT city.Name, city.District, city.Population "
                             + "FROM city, country "
-                            + "WHERE country.Region = '" + region +"' "
+                            + "WHERE country.Region = '" + region + "' "
                             + "AND  city.CountryCode = country.Code "
                             + "ORDER BY Population DESC ";
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
 
-            while (rset.next())
-            {
+            while (rset.next()) {
                 City city = new City();
                 city.name = rset.getString("city.Name");
                 city.district = rset.getString("city.District");
@@ -494,17 +486,14 @@ public class App {
                 cities.add(city);
             }
             return cities;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get details");
             return null;
         }
     }
 
-    public ArrayList<City>AllCityInCountryLtoS(String country)
-    {
+    public ArrayList<City> AllCityInCountryLtoS(String country) {
         try {
 
             ArrayList<City> cities = new ArrayList<City>();
@@ -516,14 +505,13 @@ public class App {
 
                     "SELECT city.Name, city.District, city.Population "
                             + "FROM city, country "
-                            + "WHERE country.Name = '" + country +"' "
+                            + "WHERE country.Name = '" + country + "' "
                             + "AND  city.CountryCode = country.Code "
                             + "ORDER BY Population DESC ";
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
 
-            while (rset.next())
-            {
+            while (rset.next()) {
                 City city = new City();
                 city.name = rset.getString("city.Name");
                 city.district = rset.getString("city.District");
@@ -531,9 +519,7 @@ public class App {
                 cities.add(city);
             }
             return cities;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get details");
             return null;
@@ -541,20 +527,17 @@ public class App {
     }
 
 
-    public ArrayList<City>topNpopulatedCities(int n)
-    {
-        try
-        {
+    public ArrayList<City> topNpopulatedCities(int n) {
+        try {
             Statement stmt = con.createStatement();
             String strtopNWorld =
                     "SELECT Name, District,Population "
-                            +"FROM city "
-                            +"ORDER BY Population DESC LIMIT " + n;
+                            + "FROM city "
+                            + "ORDER BY Population DESC LIMIT " + n;
 
             ResultSet rset = stmt.executeQuery(strtopNWorld);
             ArrayList<City> topNpopulationCities = new ArrayList<City>();
-            while(rset.next())
-            {
+            while (rset.next()) {
                 City city = new City();
                 city.name = rset.getString("Name");
                 city.district = rset.getString("District");
@@ -562,9 +545,166 @@ public class App {
                 topNpopulationCities.add(city);
             }
             return topNpopulationCities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
         }
-        catch (Exception e)
-        {
+    }
+
+    public ArrayList<City> topNCitiesDistrict(int n, String district) {
+        try {
+            Statement stmt = con.createStatement();
+            String strtopNWorld =
+                    "SELECT Name, District, Population "
+                            + "FROM city "
+                            + "WHERE District = '" + district + "' "
+                            + "ORDER BY Population DESC LIMIT " + n;
+
+            ResultSet rset = stmt.executeQuery(strtopNWorld);
+            ArrayList<City> topNcites = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                topNcites.add(city);
+            }
+            return topNcites;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> topNCapitalWorld(int n) {
+        try {
+            Statement stmt = con.createStatement();
+            String strtopNWorld =
+                    "SELECT city.Name, District, city.Population "
+                            + "FROM country, city "
+                            + "WHERE city.ID = country.Capital "
+                            + "ORDER BY city.Population DESC LIMIT " + n;
+
+            ResultSet rset = stmt.executeQuery(strtopNWorld);
+            ArrayList<City> topNCities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                topNCities.add(city);
+            }
+            return topNCities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> topNCitiesRegion(int n, String region) {
+        try {
+            Statement stmt = con.createStatement();
+            String strtopNWorld =
+                    "SELECT city.Name, city.District, city.Population "
+                            + "FROM city, country "
+                            + "WHERE Region = '" + region + "' "
+                            + "AND city.CountryCode = country.Code "
+                            + "ORDER BY Population DESC LIMIT " + n;
+
+            ResultSet rset = stmt.executeQuery(strtopNWorld);
+            ArrayList<City> topNcites = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                topNcites.add(city);
+            }
+            return topNcites;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> CapitalsWorldLtoS() {
+        try {
+            Statement stmt = con.createStatement();
+            String strLtoS =
+                    "SELECT city.Name, District, city.Population "
+                            + "FROM city, country "
+                            + "WHERE city.ID = country.Capital "
+                            + "ORDER BY Population DESC";
+
+            ResultSet rset = stmt.executeQuery(strLtoS);
+            ArrayList<City> LtoS = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                LtoS.add(city);
+            }
+            return LtoS;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> CapitalsContinentLtoS(String cont) {
+        try {
+            Statement stmt = con.createStatement();
+            String strLtoS =
+                    "SELECT city.Name, CountryCode, city.Population "
+                            + "FROM city,country "
+                            + "WHERE Continent = '" + cont + "' "
+                            + "AND city.ID = country.Capital "
+                            + "ORDER BY Population DESC";
+
+            ResultSet rset = stmt.executeQuery(strLtoS);
+            ArrayList<City> LtoS = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.CountryCode = rset.getString("CountryCode");
+                city.population = rset.getInt("Population");
+                LtoS.add(city);
+            }
+            return LtoS;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> CapitalsRegionLtoS(String region) {
+        try {
+            Statement stmt = con.createStatement();
+            String strLtoS =
+                    "SELECT city.Name, District, city.Population "
+                            + "FROM city,country "
+                            + "WHERE Region = '" + region + "' "
+                            + "AND city.CountryCode = country.Code "
+                            + "ORDER BY Population DESC";
+
+            ResultSet rset = stmt.executeQuery(strLtoS);
+            ArrayList<City> LtoS = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                LtoS.add(city);
+            }
+            return LtoS;
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get details");
             return null;
@@ -584,7 +724,7 @@ public class App {
                 Statement stmt = con.createStatement();
                 String strtopNWorld =
                         "SELECT city.Name,city.District, city.Population "
-                                + "FROM city,country "
+                                + "FROM city, country "
                                 + "WHERE Continent = '" + cont+"' "
                                 + "AND city.CountryCode = country.code "
                                 + "ORDER BY Population DESC LIMIT " + n;
@@ -608,28 +748,35 @@ public class App {
             return null;
         }
     }
-    public ArrayList<City> topNCitiesDistrict(int n, String district)
+
+    public ArrayList<City>topNpopulatedCitiesInCountry(int n, String country)
     {
         try
         {
-            Statement stmt = con.createStatement();
-            String strtopNWorld =
-                    "SELECT Name, District, Population "
-                            +"FROM city "
-                            +"WHERE District = '" + district +"' "
-                            +"ORDER BY Population DESC LIMIT " + n;
 
-            ResultSet rset = stmt.executeQuery(strtopNWorld);
-            ArrayList<City> topNcites = new ArrayList<City>();
-            while(rset.next())
-            {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                topNcites.add(city);
-            }
-            return topNcites;
+
+            ArrayList<City> topNpopulationCities = new ArrayList<City>();
+
+
+                Statement stmt = con.createStatement();
+                String strtopNWorld =
+                        "SELECT city.Name,city.District, city.Population "
+                                + "FROM city, country "
+                                + "WHERE country.Name = '" + country+"' "
+                                + "AND city.CountryCode = country.code "
+                                + "ORDER BY Population DESC LIMIT " + n;
+
+                ResultSet rset = stmt.executeQuery(strtopNWorld);
+
+                while (rset.next()) {
+                    City city = new City();
+                    city.name = rset.getString("city.Name");
+                    city.district=rset.getString("city.District");
+                    city.population = rset.getInt("city.Population");
+                    topNpopulationCities.add(city);
+                }
+
+            return topNpopulationCities;
         }
         catch (Exception e)
         {
@@ -639,153 +786,34 @@ public class App {
         }
     }
 
-    public ArrayList<City> topNCapitalWorld(int n)
-    {
-        try
-        {
-            Statement stmt = con.createStatement();
-            String strtopNWorld =
-                    "SELECT city.Name, District, city.Population "
-                            +"FROM country, city "
-                            +"WHERE city.ID = country.Capital "
-                            +"ORDER BY city.Population DESC LIMIT " + n;
 
-            ResultSet rset = stmt.executeQuery(strtopNWorld);
-            ArrayList<City> topNCities= new ArrayList<City>();
-            while(rset.next())
-            {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                topNCities.add(city);
-            }
-            return topNCities;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get details");
-            return null;
-        }
-    }
-
-    public ArrayList<City> topNCitiesRegion(int n, String region)
+    public ArrayList<City>AllCityInDistrictLtoS(String district)
     {
-        try
-        {
+        try {
+
+            ArrayList<City> cities = new ArrayList<City>();
+
+            // Create an SQL statement
             Statement stmt = con.createStatement();
-            String strtopNWorld =
+            // Create string for SQL statement
+            String strSelect =
+
                     "SELECT city.Name, city.District, city.Population "
-                            + "FROM city, country "
-                            + "WHERE Region = '" + region + "' "
-                            + "AND city.CountryCode = country.Code "
-                            + "ORDER BY Population DESC LIMIT " + n;
+                            + "FROM city "
+                            + "WHERE city.district = '" + district +"' "
+                            + "ORDER BY Population DESC ";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
 
-            ResultSet rset = stmt.executeQuery(strtopNWorld);
-            ArrayList<City> topNcites = new ArrayList<City>();
-            while(rset.next())
+            while (rset.next())
             {
                 City city = new City();
-                city.name = rset.getString("Name");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                topNcites.add(city);
+                city.name = rset.getString("city.Name");
+                city.district = rset.getString("city.District");
+                city.population = rset.getInt("city.Population");
+                cities.add(city);
             }
-            return topNcites;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get details");
-            return null;
-        }
-    }
-
-    public ArrayList<City> CapitalsWorldLtoS()
-    {
-        try
-        {
-            Statement stmt = con.createStatement();
-            String strLtoS =
-                    "SELECT city.Name, District, city.Population "
-                            +"FROM city, country "
-                            +"WHERE city.ID = country.Capital "
-                            +"ORDER BY Population DESC";
-
-            ResultSet rset = stmt.executeQuery(strLtoS);
-            ArrayList<City> LtoS = new ArrayList<City>();
-            while(rset.next())
-            {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                LtoS.add(city);
-            }
-            return LtoS;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get details");
-            return null;
-        }
-    }
-
-    public ArrayList<City> CapitalsContinentLtoS(String cont){
-        try
-        {
-            Statement stmt = con.createStatement();
-            String strLtoS =
-                    "SELECT city.Name, CountryCode, city.Population "
-                            + "FROM city,country "
-                            + "WHERE Continent = '" + cont + "' "
-                            + "AND city.ID = country.Capital "
-                            + "ORDER BY Population DESC";
-
-            ResultSet rset = stmt.executeQuery(strLtoS);
-            ArrayList<City> LtoS = new ArrayList<City>();
-            while(rset.next())
-            {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.CountryCode = rset.getString("CountryCode");
-                city.population = rset.getInt("Population");
-                LtoS.add(city);
-            }
-            return LtoS;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get details");
-            return null;
-        }
-    }
-
-    public ArrayList<City> CapitalsRegionLtoS(String region){
-        try
-        {
-            Statement stmt = con.createStatement();
-            String strLtoS =
-                    "SELECT city.Name, District, city.Population "
-                            + "FROM city,country "
-                            + "WHERE Region = '" + region + "' "
-                            + "AND city.CountryCode = country.Code "
-                            + "ORDER BY Population DESC";
-
-            ResultSet rset = stmt.executeQuery(strLtoS);
-            ArrayList<City> LtoS = new ArrayList<City>();
-            while(rset.next())
-            {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                LtoS.add(city);
-            }
-            return LtoS;
+            return cities;
         }
         catch (Exception e)
         {
