@@ -201,5 +201,27 @@ public class AppIntegrationTest
         Integer d = city.get(0).population;
     }
 
+    @Test
+    void CapitalsContinentLtoS(){
+        ArrayList<City> city = app.CapitalsContinentLtoS("Europe");
+        String a =  city.get(0).name;;
+        String b = "Moscow";
+        assertEquals(a, b);
 
+        Integer c = 8389200;
+        Integer d = city.get(0).population;
+        assertEquals(c, d);
+    }
+
+    @Test
+    void CapitalsRegionLtoS(){
+        ArrayList<City> city = app.CapitalsRegionLtoS("Western Europe");
+        String a =  city.get(0).name;;
+        String b = "Berlin";
+        assertEquals(a, b);
+
+        Integer c = 3386667;
+        Integer d = city.get(0).population;
+        assertEquals(c, d);
+    }
 }
