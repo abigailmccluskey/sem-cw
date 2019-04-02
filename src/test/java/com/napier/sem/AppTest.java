@@ -3,7 +3,9 @@ package com.napier.sem;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.expression.spel.ast.NullLiteral;
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,6 +38,7 @@ public class AppTest
         ArrayList<Country> countries = new ArrayList<>();
         Country country1 = new Country();
         Country country2 = new Country();
+        Country country3 = new Country();
         country1.Name = "Scotland";
         country1.Population = 100000;
         country1.Continent = "Europe";
@@ -46,8 +49,14 @@ public class AppTest
         country2.Continent = "Europe";
         country2.Region = "Northern Europe";
 
+        country3.Name = null;
+        country3.Population = 0;
+        country3.Continent = null;
+        country3.Region = null;
+
         countries.add(country1);
         countries.add(country2);
+        countries.add(country3);
         app.displayCountriesByRegion(countries);
     }
 
@@ -62,5 +71,26 @@ public class AppTest
 
         cities.add(city1);
         app.displayCities(cities);
+    }
+
+    @Test
+    void displayCitiesByCountry()
+    {
+        ArrayList<City> cities = new ArrayList<>();
+        City city1 = new City();
+        City city2 = new City();
+        city1.name = "Edinburgh";
+        city1.district = "West Lothian";
+        city1.CountryCode = "GBR";
+        city1.population = 100000;
+
+        city2.name = null;
+        city2.district = null;
+        city2.CountryCode = null;
+        city2.population = 0;
+
+        cities.add(city1);
+        cities.add(city2);
+        app.displayCitiesByCountry(cities);
     }
 }

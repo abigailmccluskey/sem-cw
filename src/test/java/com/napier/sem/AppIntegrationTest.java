@@ -1,5 +1,6 @@
 package com.napier.sem;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -8,20 +9,22 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AppIntegrationTest
-{
+public class AppIntegrationTest {
     static App app;
 
     @BeforeAll
-    static void init()
-    {
+    static void init() {
         app = new App();
         app.connect("localhost:33060");
     }
 
+    @AfterAll
+    static void dc() {
+        app.disconnect();
+    }
+
     @Test
-    void testPopulationLtoS()
-    {
+    void testPopulationLtoS() {
         ArrayList<Country> countries = app.worldLtoS();
         Country country = countries.get(0);
 
@@ -29,30 +32,28 @@ public class AppIntegrationTest
         int b = country.Population;
         assertEquals(a, b);
 
-        country = countries.get(countries.size()-1);
+        country = countries.get(countries.size() - 1);
         a = 0;
         b = country.Population;
         assertEquals(a, b);
     }
 
     @Test
-    void testTopNContinent()
-    {
+    void testTopNContinent() {
         ArrayList<Country> countries = app.topNContinent(3);
         Country country = countries.get(0);
         String a = "China";
         String b = country.Name;
         assertEquals(a, b);
 
-        country = countries.get(countries.size()-1);
+        country = countries.get(countries.size() - 1);
         a = "Argentina";
         b = country.Name;
         assertEquals(a, b);
     }
 
     @Test
-    void AllCountriesInRegion()
-    {
+    void AllCountriesInRegion() {
         ArrayList<Country> countries = app.AllCountriesInRegion("Eastern Europe");
         Country country = countries.get(0);
         String a = "Russian Federation";
@@ -65,7 +66,7 @@ public class AppIntegrationTest
     }
 
     @Test
-    void AllCityInRegionLtoS(){
+    void AllCityInRegionLtoS() {
         ArrayList<City> cities = app.AllCityInRegionLtoS("Eastern Europe");
         City city = cities.get(0);
         int a = 8389200;
@@ -78,7 +79,7 @@ public class AppIntegrationTest
     }
 
     @Test
-    void AllCityInCountryLtoS(){
+    void AllCityInCountryLtoS() {
         ArrayList<City> cities = app.AllCityInCountryLtoS("South Africa");
         City city = cities.get(0);
         int a = 2352121;
@@ -91,8 +92,7 @@ public class AppIntegrationTest
     }
 
     @Test
-    void CitiesOnContinentLtoS()
-    {
+    void CitiesOnContinentLtoS() {
         ArrayList<City> cities = app.CitiesOnContinentLtoS("Africa");
 
         int a = 6789479;
@@ -106,8 +106,7 @@ public class AppIntegrationTest
     }
 
     @Test
-    void CountriesContinentLtoS()
-    {
+    void CountriesContinentLtoS() {
         ArrayList<Country> countries = app.CountriesContinentLtoS("Europe");
 
         String a = "Russian Federation";
@@ -121,8 +120,7 @@ public class AppIntegrationTest
     }
 
     @Test
-    void TopNWorld()
-    {
+    void TopNWorld() {
         ArrayList<Country> countries = app.topNWorld(5);
         String a = "China";
         String b = countries.get(0).Name;
@@ -130,11 +128,12 @@ public class AppIntegrationTest
 
         Integer c = 1277558000;
         Integer d = countries.get(0).Population;
+
+        assertEquals(c,d);
     }
 
     @Test
-    void citiesInWorldLtoS()
-    {
+    void citiesInWorldLtoS() {
         ArrayList<City> cities = app.citiesInWorldLtoS();
 
         int a = 9981619;
@@ -148,8 +147,7 @@ public class AppIntegrationTest
     }
 
     @Test
-    void topNCitiesDistrict()
-    {
+    void topNCitiesDistrict() {
         ArrayList<City> cities = app.topNCitiesDistrict(3, "Western Cape");
 
         int a = 2352121;
@@ -163,8 +161,7 @@ public class AppIntegrationTest
     }
 
     @Test
-    void topNCitiesRegion()
-    {
+    void topNCitiesRegion() {
         ArrayList<City> cities = app.topNCitiesRegion(3, "Eastern Europe");
 
         int a = 8389200;
@@ -178,8 +175,7 @@ public class AppIntegrationTest
     }
 
     @Test
-    void TopNpopulatedCities()
-    {
+    void TopNpopulatedCities() {
         ArrayList<City> city = app.topNpopulatedCities(4);
         String a = "Mumbai (Bombay)";
         String b = city.get(0).name;
@@ -187,11 +183,11 @@ public class AppIntegrationTest
 
         Integer c = 10500000;
         Integer d = city.get(0).population;
+        assertEquals(c,d);
     }
 
     @Test
-    void TopNpopulatedCitiesInContinent()
-    {
+    void TopNpopulatedCitiesInContinent() {
         ArrayList<City> city = app.topNpopulatedCitiesInContinent(5);
         String a = "Mumbai (Bombay)";
         String b = city.get(0).name;
@@ -199,12 +195,14 @@ public class AppIntegrationTest
 
         Integer c = 10500000;
         Integer d = city.get(0).population;
+        assertEquals(c,d);
     }
 
     @Test
-    void CapitalsContinentLtoS(){
+    void CapitalsContinentLtoS() {
         ArrayList<City> city = app.CapitalsContinentLtoS("Europe");
-        String a =  city.get(0).name;;
+        String a = city.get(0).name;
+        ;
         String b = "Moscow";
         assertEquals(a, b);
 
@@ -214,14 +212,65 @@ public class AppIntegrationTest
     }
 
     @Test
-    void CapitalsRegionLtoS(){
+    void CapitalsRegionLtoS() {
         ArrayList<City> city = app.CapitalsRegionLtoS("Western Europe");
-        String a =  city.get(0).name;;
+        String a = city.get(0).name;
         String b = "Berlin";
         assertEquals(a, b);
 
         Integer c = 3386667;
         Integer d = city.get(0).population;
+        assertEquals(c, d);
+    }
+
+    @Test
+    void topNCapitalWorld() {
+        ArrayList<City> city = app.topNCapitalWorld(5);
+        String a = city.get(0).name;
+        String b = "Seoul";
+        assertEquals(a, b);
+
+        int c = city.get(0).population;
+        int d = 9981619;
+        assertEquals(c,d);
+    }
+
+    @Test
+    void CapitalsWorldLtoS() {
+        ArrayList<City> city = app.CapitalsWorldLtoS();
+        String a = city.get(0).name;
+        String b = "Seoul";
+        assertEquals(a, b);
+
+        int c = city.get(0).population;
+        int d = 9981619;
+        assertEquals(c, d);
+    }
+
+    @Test
+    void topNpopulatedCitiesInCountry() {
+        ArrayList<City> city = app.topNpopulatedCitiesInCountry(5, "Germany");
+        String a = city.get(0).name;
+        String b = "Berlin";
+        assertEquals(a, b);
+
+        int c = city.get(0).population;
+        int d = 3386667;
+        assertEquals(c, d);
+    }
+
+    @Test
+    void AllCityInDistrictLtoS()
+    {
+        ArrayList<City> city = app.AllCityInDistrictLtoS("Zuid-Holland");
+        ArrayList<City> test = app.AllCityInDistrictLtoS(null);
+
+        String a = city.get(0).name;
+        String b = "Rotterdam";
+        assertEquals(a, b);
+
+        int c = city.get(0).population;
+        int d = 593321;
         assertEquals(c, d);
     }
 }
