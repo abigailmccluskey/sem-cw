@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class App {
     public static void main(String[] args) {
         // Create new Application
+        int n;
         App a = new App();
 
         // Connect to database
@@ -21,7 +22,7 @@ public class App {
         a.displayCountries(countries);
 
         //Listing top N countries per continent
-        int n = 3;
+        n = 3;
         System.out.println("\nTOP " + n + " countries per continent:");
         ArrayList<Country> topNContinent = a.topNContinent(n);
         a.displayCountries(topNContinent);
@@ -121,6 +122,11 @@ public class App {
         System.out.println("\nListing all cities in the district");
         ArrayList<City> AllCityInDistrictLtoS= a.AllCityInDistrictLtoS("Zuid-Holland");
         a.displayCities(AllCityInDistrictLtoS);
+
+        n = 5;
+        System.out.println("\nListing top N capital cities per continent.");
+        ArrayList<City> topNCapitalContinent = a.topNCapitalContinent(n);
+        a.displayCities(topNCapitalContinent);
 
         //Disconnect from database
         a.disconnect();
@@ -691,7 +697,7 @@ public class App {
                     "SELECT city.Name, District, city.Population "
                             + "FROM city,country "
                             + "WHERE Region = '" + region + "' "
-                            + "AND city.CountryCode = country.Code "
+                            + "AND city.ID = country.Capital "
                             + "ORDER BY Population DESC";
 
             ResultSet rset = stmt.executeQuery(strLtoS);
@@ -723,10 +729,10 @@ public class App {
             {
                 Statement stmt = con.createStatement();
                 String strtopNWorld =
-                        "SELECT city.Name,city.District, city.Population "
+                        "SELECT city.Name, city.District, city.Population "
                                 + "FROM city, country "
-                                + "WHERE Continent = '" + cont+"' "
-                                + "AND city.CountryCode = country.code "
+                                + "WHERE Continent = '" + cont +"' "
+                                + "AND city.CountryCode = country.Code "
                                 + "ORDER BY Population DESC LIMIT " + n;
 
                 ResultSet rset = stmt.executeQuery(strtopNWorld);
@@ -817,6 +823,45 @@ public class App {
         }
         catch (Exception e)
         {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> topNCapitalContinent(int n)
+    {
+        try {
+            String[] continents = new String[]{"Asia", "Europe", "North America", "Africa", "Oceania", "Antarctica", "South America"};
+
+            ArrayList<City> cities = new ArrayList<City>();
+
+            for (String cont : continents) {
+                // Create an SQL statement
+                Statement stmt = con.createStatement();
+                // Create string for SQL statement
+                String strSelect =
+                        "SELECT city.Name, city.District, city.Population "
+                                + "FROM city, country "
+                                + "WHERE country.Continent = '" + cont +"' "
+                                + "AND city.ID = country.Capital "
+                                + "ORDER BY Population DESC LIMIT " + n;
+                // Execute SQL statement
+                ResultSet rset = stmt.executeQuery(strSelect);
+                // Extract employee information
+
+                while (rset.next()) {
+                    City city = new City();
+                    city.name = rset.getString("Name");
+                    city.district = rset.getString("District");
+                    city.population = rset.getInt("Population");
+                    cities.add(city);
+                }
+            }
+
+
+            return cities;
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get details");
             return null;

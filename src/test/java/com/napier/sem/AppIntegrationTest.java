@@ -273,4 +273,18 @@ public class AppIntegrationTest {
         int d = 593321;
         assertEquals(c, d);
     }
+
+    @Test
+    void topNCapitalContinent()
+    {
+        ArrayList<City> city = app.topNCapitalContinent(5);
+
+        String a = city.get(2).name;
+        String b = "Tokyo";
+        assertEquals(a, b);
+
+        int c = city.get(2).population;
+        int d = 7980230;
+        assertEquals(c, d);
+    }
 }
