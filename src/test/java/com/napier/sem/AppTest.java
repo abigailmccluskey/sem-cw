@@ -93,4 +93,23 @@ public class AppTest
         cities.add(city2);
         app.displayCitiesByCountry(cities);
     }
+    @Test
+    public void displayPop(){
+        ArrayList<Population> pops = new ArrayList<>();
+        Population pop1 = new Population();
+        Population pop2 = new Population();
+        pop1.continent =  "North America";
+        pop1.continentPopulation = "1970128447000";
+        pop1.cityPopulation = "52893715708";
+        pop1.nonCityPopulation = "1917234731292";
+
+        pop2.continent =  null;
+        pop2.continentPopulation = null;
+        pop2.cityPopulation = null;
+        pop2.nonCityPopulation = null;
+
+        pops.add(pop1);
+        pops.add(pop2);
+        app.displayPop(pops);
+    }
 }
