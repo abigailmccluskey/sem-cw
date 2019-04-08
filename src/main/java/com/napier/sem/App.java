@@ -128,6 +128,12 @@ public class App {
         ArrayList<City> topNCapitalContinent = a.topNCapitalContinent(n);
         a.displayCities(topNCapitalContinent);
 
+
+        n = 5;
+        System.out.println("\nListing top N capital cities in region");
+        ArrayList<City> topNCapitalregion = a.TopNpopulatedCapitalCitiesInRegion(n,region);
+        a.displayCities(topNCapitalregion);
+
         //Disconnect from database
         a.disconnect();
     }
@@ -867,4 +873,45 @@ public class App {
             return null;
         }
     }
+
+    public ArrayList<City>TopNpopulatedCapitalCitiesInRegion(int n, String region)
+    {
+        try
+        {
+
+
+            ArrayList<City> topNpopulationCities = new ArrayList<City>();
+
+
+            Statement stmt = con.createStatement();
+            String strtopNWorld =
+                    "SELECT city.Name,city.District, city.Population "
+                            + "FROM city, country "
+                            + "WHERE Region = '" + region+"' "
+                            + "AND city.ID = country.Capital "
+                            + "ORDER BY Population DESC LIMIT " + n;
+
+            ResultSet rset = stmt.executeQuery(strtopNWorld);
+
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("city.Name");
+                city.district=rset.getString("city.District");
+                city.population = rset.getInt("city.Population");
+                topNpopulationCities.add(city);
+            }
+
+            return topNpopulationCities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+
+
+
 }
