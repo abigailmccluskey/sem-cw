@@ -128,6 +128,12 @@ public class App {
         ArrayList<City> topNCapitalContinent = a.topNCapitalContinent(n);
         a.displayCities(topNCapitalContinent);
 
+        //Listing the population of people, people in cities, and people not living in cities in each continent
+        System.out.println("\nListing the population of people, people in cities, and people not living in cities in each continent.");
+        ArrayList<Population> populationPerContinent = a.populationPerContinent();
+        a.displayPop(populationPerContinent);
+
+
         //Disconnect from database
         a.disconnect();
     }
@@ -255,6 +261,19 @@ public class App {
             System.out.println(emp_string);
         }
     }
+
+    public void displayPop(ArrayList<Population> pops){
+        System.out.println(String.format("%-15s %-20s %-15s %-20s","Continent", "Continent Pop", "City Pop", "Not City Pop"));
+        for (Population pop : pops) {
+            String emp_string =
+                    String.format("%-15s %-20s %-15s %-20s",
+                            pop.continent, pop.continentPopulation, pop.cityPopulation, pop.nonCityPopulation);
+            System.out.println(emp_string);
+        }
+    }
+
+
+
 
     public ArrayList<Country> topNContinent(int n) {
         try {
@@ -867,4 +886,42 @@ public class App {
             return null;
         }
     }
+
+    public ArrayList<Population> populationPerContinent(){
+        try {
+
+            ArrayList<Population> pops = new ArrayList<Population>();
+
+
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Continent, SUM(country.Population) AS 'Cont', SUM(city.Population) AS 'City', (SUM(country.Population) - SUM(city.Population)) AS 'Not City Pop' "
+                            + "FROM country, city "
+                            + "GROUP BY Continent";
+
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+
+            while (rset.next()) {
+                Population pop = new Population();
+                pop.continent =  rset.getString("Continent");
+                pop.continentPopulation = rset.getString("Cont");
+                pop.cityPopulation = rset.getString("City");
+                pop.nonCityPopulation = rset.getString("Not City Pop");
+                pops.add(pop);
+            }
+
+
+
+            return pops;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
 }
