@@ -299,10 +299,4 @@ public class AppIntegrationTest {
         String d = "52893715708";
         assertEquals(c, d);
     }
-
-    @Test
-    public void ListingTest()
-    {
-        app.Listing(app);
-    }
 }
