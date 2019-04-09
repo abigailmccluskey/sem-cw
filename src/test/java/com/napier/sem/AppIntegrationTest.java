@@ -287,4 +287,16 @@ public class AppIntegrationTest {
         int d = 7980230;
         assertEquals(c, d);
     }
+    @Test
+    void populationPerContinent(){
+        ArrayList<Population> populationPerContinent = app.populationPerContinent();
+
+        String a = populationPerContinent.get(0).continentPopulation;
+        String b = "1970128447000";
+        assertEquals(a, b);
+
+        String c = populationPerContinent.get(0).cityPopulation;
+        String d = "52893715708";
+        assertEquals(c, d);
+    }
 }
