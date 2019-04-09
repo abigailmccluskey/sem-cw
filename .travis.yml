@@ -46,7 +46,7 @@ jobs:
       jdk: oraclejdk11
       script:
         - echo "Deploying to GitHub Releases"
-        # Package the Application.
+        # Package the hello.Application.
         - mvn package -DskipTests=true -Dmaven.javadoc.skip=true
       before_deploy:
         # Set our Git user name and email.
@@ -78,7 +78,7 @@ jobs:
         - gcloud auth activate-service-account --key-file client-secret.json
       script:
         # Set the project we will work in.
-        - gcloud config set project sem-cw-235814
+        - gcloud config set project semethods-235016
         # Set the zone to work in.
         - gcloud config set compute/zone europe-west2-b
         # Assign project ID to a variable to make life easier
@@ -89,12 +89,30 @@ jobs:
         - docker build -t gcr.io/${PROJECT_ID}/db db/.
         # Push the database image.
         - docker push gcr.io/${PROJECT_ID}/db
+        # Build the application
+        - mvn package -DskipTests=true -Dmaven.javadoc.skip=true
+        # Build the application image
+        - docker build -t gcr.io/${PROJECT_ID}/app .
+        # Push the application image.
+        - docker push gcr.io/${PROJECT_ID}/app
+        # Build the web image.
+        - docker build -t gcr.io/${PROJECT_ID}/web web/.
+        # Push the web image.
+        - docker push gcr.io/${PROJECT_ID}/web
         # Create a container cluster.  We only need one node.
         - gcloud container clusters create hr-cluster --num-nodes=1
         # Tell kubernetes to run the built database image, opening port 3306
-        - kubectl run hr --image=gcr.io/${PROJECT_ID}/db --port 3306
-        # Expose the cluster to the Internet, mapping external port 3306 to internal port 3306.
-        - kubectl expose deployment hr --port=3306 --target-port=3306 --type=LoadBalancer
+        - kubectl run db --image=gcr.io/${PROJECT_ID}/db --port 3306
+        # Expose database service to the rest of the cluster with name db.
+        - kubectl expose deployment db --name=db
+        # Tell kubernetes to run the build application image, opening port 8080
+        - kubectl run app --image=gcr.io/${PROJECT_ID}/app --port 8080
+        # Expose the app service
+        - kubectl expose deployment app --name=app
+        # Tell kubernetes to run the built web image, opening port 80
+        - kubectl run web --image=gcr.io/${PROJECT_ID}/web --port 80
+        # Expose the web interface, mapping external port 80 to internal port 80
+        - kubectl expose deployment web --port=80 --target-port=80 --type=LoadBalancer
 
 stages:
   - unit tests
@@ -107,6 +125,7 @@ stages:
 after_success:
   # Push code coverage data to codecov.
   - bash <(curl -s https://codecov.io/bash)
+  -
 before_install:
-  - openssl aes-256-cbc -K $encrypted_09679221e033_key -iv $encrypted_09679221e033_iv
+  - openssl aes-256-cbc -K $encrypted_fc6a649e71bd_key -iv $encrypted_fc6a649e71bd_iv
     -in client-secret.json.enc -out client-secret.json -d
