@@ -138,6 +138,9 @@ public class App {
         System.out.println("\nListing the population of people, people in cities, and people not living in cities in each continent.");
         ArrayList<Population> populationPerContinent = a.populationPerContinent();
         a.displayPop(populationPerContinent);
+        System.out.println("\nPrinting the info for Chinese, English, Spanish, Hindi and Arabic as well as their corresponding percentages in the world.");
+        ArrayList<countryLanguage> languages = a.languages();
+        a.DisplayLanguage(languages);
 
 
         System.out.println("\nListing the population of the world, a given continent, a given region, a given country, a given district and a given city.");
@@ -276,6 +279,16 @@ public class App {
             String emp_string =
                     String.format("%-10s %-15s %-20s",
                             city.name, city.CountryCode, city.population);
+            System.out.println(emp_string);
+        }
+    }
+
+    public void DisplayLanguage(ArrayList<countryLanguage> languages) {
+        System.out.println(String.format("%-15s %-20s %-15s", "Language", "Percentage", "Population"));
+        for (countryLanguage language : languages) {
+            String emp_string =
+                    String.format("%-15s %-20s %-15s",
+                            language.Language, language.Percentage +"%", language.Population);
             System.out.println(emp_string);
         }
     }
@@ -983,6 +996,38 @@ public class App {
         }
     }
 
+    public ArrayList<countryLanguage> languages() {
+        //As an organisation, we want information on the number of people who speak Chinese, English, Hindi,
+        // Spanish and Arabic, including the percentage of the world population that speaks these languages.
+        try {
+            String[] requiremets = new String[]{"Chinese", "English", "Hindi", "Spanish", "Arabic"};
+            ArrayList<countryLanguage> languages = new ArrayList<countryLanguage>();
+            for(String lang : requiremets)
+            {
+                Statement stmt = con.createStatement();
+                String strSelect = "SELECT Language, (SUM((Population * Percentage)/100)/6078749450)*100 As Percentage,SUM((Population * Percentage)/100) As Population "
+                        + "FROM countrylanguage, country "
+                        + "WHERE Language = '" + lang + "' "
+                        + "AND country.code = countrylanguage.CountryCode "
+                        + "GROUP BY Language";
+                ResultSet rset = stmt.executeQuery(strSelect);
+
+                while (rset.next()) {
+                    countryLanguage language = new countryLanguage();
+                    language.Language = rset.getString("Language");
+                    language.Percentage = rset.getInt("Percentage");
+                    language.Population = rset.getInt("Population");
+                    languages.add(language);
+                }
+            }
+            return languages;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
     public Given populationContinentRegionCountryDistrictCity(String continent, String region, String country, String district, String city)
     {
         Given given = new Given();
