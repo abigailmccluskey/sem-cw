@@ -961,22 +961,25 @@ public class App {
         //As an organisation, we want information on the number of people who speak Chinese, English, Hindi,
         // Spanish and Arabic, including the percentage of the world population that speaks these languages.
         try {
+            String[] requiremets = new String[]{"Chinese", "English", "Hindi", "Spanish", "Arabic"};
             ArrayList<countryLanguage> languages = new ArrayList<countryLanguage>();
-            Statement stmt = con.createStatement();
+            for(String lang : requiremets)
+            {
+                Statement stmt = con.createStatement();
+                String strSelect = "SELECT Language, (SUM((Population * Percentage)/100)/6078749450)*100 As Percentage,SUM((Population * Percentage)/100) As Population "
+                        + "FROM countrylanguage, country "
+                        + "WHERE Language = '" + lang + "' "
+                        + "AND country.code = countrylanguage.CountryCode "
+                        + "GROUP BY Language";
+                ResultSet rset = stmt.executeQuery(strSelect);
 
-            String strSelect = "SELECT Language, Percentage, ((Population * Percentage)/100) As Population "
-                    + "FROM countrylanguage, country "
-                    + "WHERE Language = 'Chinese'"
-                    + "AND country.code = countrylanguage.CountryCode "
-                    + "ORDER BY Percentage";
-            ResultSet rset = stmt.executeQuery(strSelect);
-
-            while (rset.next()) {
-                countryLanguage language = new countryLanguage();
-                language.Language = rset.getString("Language");
-                language.Percentage = rset.getFloat("Country Percentage");
-                language.Population = rset.getInt("Population");
-                languages.add(language);
+                while (rset.next()) {
+                    countryLanguage language = new countryLanguage();
+                    language.Language = rset.getString("Language");
+                    language.Percentage = rset.getInt("Percentage");
+                    language.Population = rset.getInt("Population");
+                    languages.add(language);
+                }
             }
             return languages;
 
