@@ -299,4 +299,18 @@ public class AppIntegrationTest {
         String d = "52893715708";
         assertEquals(c, d);
     }
+    @Test
+    void givens()
+    {
+        Given given = new Given();
+        given = app.populationContinentRegionCountryDistrictCity("Africa", "Eastern Europe", "Poland", "Scotland", "Tokyo");
+
+        long world = 6078749450L;
+        long continent = 784475000;
+        int country = 38653600;
+
+        assertEquals(world, given.worldPopulation);
+        assertEquals(continent, given.continentPopulation);
+        assertEquals(country, given.countryPopulation);
+    }
 }
