@@ -112,4 +112,18 @@ public class AppTest
         pops.add(pop2);
         app.displayPop(pops);
     }
+
+    @Test
+    public void displayGiven()
+    {
+        Given given = new Given();
+        given.worldPopulation = 0;
+        given.continentPopulation = 0;
+        given.regionPopulation = 0;
+        given.countryPopulation = 0;
+        given.districtPopulation = 0;
+        given.cityPopulation = 0;
+
+        app.displayGivens(given);
+    }
 }

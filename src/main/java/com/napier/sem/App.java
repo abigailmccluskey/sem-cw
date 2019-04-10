@@ -140,6 +140,9 @@ public class App {
         a.displayPop(populationPerContinent);
 
 
+        System.out.println("\nListing the population of the world, a given continent, a given region, a given country, a given district and a given city.");
+        Given given = a.populationContinentRegionCountryDistrictCity("Africa", "Eastern Europe", "Poland", "Scotland", "Tokyo");
+        a.displayGivens(given);
         //Disconnect from database
         a.disconnect();
     }
@@ -225,6 +228,15 @@ public class App {
             System.out.println("Failed to get details");
             return null;
         }
+    }
+
+    public void displayGivens(Given given)
+    {
+        System.out.println(String.format("%-10s %-15s %-20s %-25s %-30s %-35s", "World", given.continent, given.Region, given.country, given.district, given.city));
+        String emp_string =
+                String.format("%-10s %-15s %-20s %-25s %-30s %-35s",
+                        given.worldPopulation, given.continentPopulation, given.regionPopulation, given.countryPopulation, given.districtPopulation, given.cityPopulation);
+        System.out.println(emp_string);
     }
 
     /**
@@ -971,4 +983,80 @@ public class App {
         }
     }
 
+    public Given populationContinentRegionCountryDistrictCity(String continent, String region, String country, String district, String city)
+    {
+        Given given = new Given();
+        try {
+            Statement stmt = con.createStatement();
+            String worldPop =
+                    "SELECT SUM(country.Population) AS Population "
+                    +"FROM country ";
+            ResultSet world = stmt.executeQuery(worldPop);
+            while (world.next())
+            {
+                given.worldPopulation = world.getLong("Population");
+            }
+
+            String continentPop =
+                    "SELECT SUM(Population) As Population "
+                    +"FROM country "
+                    +"WHERE Continent = '" + continent + "' ";
+            ResultSet rsetCont = stmt.executeQuery(continentPop);
+            while (rsetCont.next())
+            {
+                given.continent = continent;
+                given.continentPopulation = rsetCont.getLong("Population");
+            }
+
+            String regionPop =
+                    "SELECT SUM(Population) As Population "
+                            +"FROM country "
+                            +"WHERE Region = '" + region + "' ";
+            ResultSet rsetRegion = stmt.executeQuery(regionPop);
+            while (rsetRegion.next())
+            {
+                given.Region = region;
+                given.regionPopulation = rsetRegion.getInt("Population");
+            }
+
+            String countryPop =
+                    "SELECT Population "
+                            +"FROM country "
+                            +"WHERE Name = '" + country + "' ";
+            ResultSet rsetCountry = stmt.executeQuery(countryPop);
+            while (rsetCountry.next())
+            {
+                given.country = country;
+                given.countryPopulation = rsetCountry.getInt("Population");
+            }
+
+            String districtPop =
+                    "SELECT SUM(Population) As Population "
+                            +"FROM city "
+                            +"WHERE District = '" + district + "' ";
+            ResultSet rsetDistrict = stmt.executeQuery(districtPop);
+            while (rsetDistrict.next())
+            {
+                given.district = district;
+                given.districtPopulation = rsetDistrict.getInt("Population");
+            }
+
+            String cityPop =
+                    "SELECT SUM(Population) As Population "
+                            +"FROM city "
+                            +"WHERE Name = '" + city + "' ";
+            ResultSet rsetCity = stmt.executeQuery(cityPop);
+            while (rsetCity.next())
+            {
+                given.city = city;
+                given.cityPopulation = rsetCity.getInt("Population");
+            }
+            return given;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
 }
