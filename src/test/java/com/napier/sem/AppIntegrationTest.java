@@ -136,11 +136,11 @@ public class AppIntegrationTest {
     void citiesInWorldLtoS() {
         ArrayList<City> cities = app.citiesInWorldLtoS();
 
-        int a = 9981619;
-        int b = cities.get(1).population;
+        int a = 10500000;
+        int b = cities.get(0).population;
         assertEquals(a, b);
 
-        String c = "Seoul";
+        String c = "Mumbai (Bombay)";
         String d = cities.get(1).name;
 
         assertEquals(c, d);

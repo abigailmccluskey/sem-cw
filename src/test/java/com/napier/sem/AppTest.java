@@ -57,7 +57,7 @@ public class AppTest
         countries.add(country1);
         countries.add(country2);
         countries.add(country3);
-        app.displayCountriesByRegion(countries);
+        //app.displayCountriesByRegion(countries);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class AppTest
 
         cities.add(city1);
         cities.add(city2);
-        app.displayCitiesByCountry(cities);
+        //app.displayCitiesByCountry(cities);
     }
     @Test
     public void displayPop(){
