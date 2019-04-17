@@ -156,7 +156,7 @@ public class App {
 
         System.out.println("\nPrinting the info for Chinese, English, Spanish, Hindi and Arabic as well as their corresponding percentages in the world.");
         ArrayList<countryLanguage> languages = a.languages();
-        a.DisplayLanguage(languages);
+        a.displayLanguage(languages);
 
 
         System.out.println("\nListing the population of the world, a given continent, a given region, a given country, a given district and a given city.");
@@ -258,7 +258,7 @@ public class App {
             System.out.println(emp_string);
         }
     }
-    public void DisplayLanguage(ArrayList<countryLanguage> languages) {
+    public void displayLanguage(ArrayList<countryLanguage> languages) {
         System.out.println(String.format("%-15s %-20s %-15s", "Language", "Percentage", "Population"));
         for (countryLanguage language : languages) {
             String emp_string =
