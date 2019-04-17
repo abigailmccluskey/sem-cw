@@ -141,7 +141,7 @@ public class AppIntegrationTest {
         assertEquals(a, b);
 
         String c = "Mumbai (Bombay)";
-        String d = cities.get(1).name;
+        String d = cities.get(0).name;
 
         assertEquals(c, d);
     }
