@@ -171,6 +171,25 @@ public class AppTest
         pops.add(pop2);
         app.displayRegionPop(pops);
     }
+    @Test
+    public void displayCountryPop(){
+        ArrayList<Population> pops = new ArrayList<>();
+        Population pop1 = new Population();
+        Population pop2 = new Population();
+        pop1.country =  "Afghanistan";
+        pop1.pop = "22720000";
+        pop1.cityPopulation = "2332100";
+        pop1.nonCityPopulation = "20387900";
+
+        pop2.country =  null;
+        pop2.pop = null;
+        pop2.cityPopulation = null;
+        pop2.nonCityPopulation = null;
+
+        pops.add(pop1);
+        pops.add(pop2);
+        app.displayCountryPop(pops);
+    }
 
     @Test
     public void displayGiven()

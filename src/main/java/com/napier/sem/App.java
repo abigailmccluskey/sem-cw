@@ -172,6 +172,11 @@ public class App {
         ArrayList<Population> populationPerRegion = a.populationPerRegion();
         a.displayRegionPop(populationPerRegion);
 
+        //Listing the population of people, people in cities, and people not living in cities in each country
+        System.out.println("\nListing the population of people, people in cities, and people not living in cities in each country.");
+        ArrayList<Population> populationPerCountry = a.populationPerCountry();
+        a.displayCountryPop(populationPerCountry);
+
         //Disconnect from database
         a.disconnect();
     }
@@ -294,6 +299,16 @@ public class App {
             String emp_string =
                     String.format("%-25s %-20s %-15s %-20s",
                             pop.region, pop.pop, pop.cityPopulation, pop.nonCityPopulation);
+            System.out.println(emp_string);
+        }
+    }
+
+    public void displayCountryPop(ArrayList<Population> pops){
+        System.out.println(String.format("%-35s %-20s %-15s %-20s","Country", "Country Pop", "City Pop", "Not City Pop"));
+        for (Population pop : pops) {
+            String emp_string =
+                    String.format("%-35s %-20s %-15s %-20s",
+                            pop.country, pop.pop, pop.cityPopulation, pop.nonCityPopulation);
             System.out.println(emp_string);
         }
     }
@@ -1229,6 +1244,45 @@ public class App {
                 Population pop = new Population();
                 pop.region =  rset.getString("Region");
                 pop.pop = rset.getString("RegionPop");
+                pop.cityPopulation = rset.getString("City");
+                pop.nonCityPopulation = rset.getString("Not City Pop");
+                pops.add(pop);
+            }
+
+
+
+            return pops;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
+
+    public ArrayList<Population> populationPerCountry(){
+        try {
+
+            ArrayList<Population> pops = new ArrayList<Population>();
+
+
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect = "SELECT A.Name, A.Cont AS 'CountryPop', B.City AS 'City', (A.Cont - B.City) AS 'Not City Pop' "
+                    + "FROM (SELECT country.Name, SUM(country.Population) AS 'Cont' FROM country GROUP BY country.Name) AS A, "
+                    + "(SELECT country.Name , SUM(city.Population) AS 'City' FROM country JOIN city ON city.CountryCode = country.Code GROUP BY country.Name) AS B "
+                    + "WHERE A.Name = B.Name";
+
+
+
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+
+            while (rset.next()) {
+                Population pop = new Population();
+                pop.country =  rset.getString("Name");
+                pop.pop = rset.getString("CountryPop");
                 pop.cityPopulation = rset.getString("City");
                 pop.nonCityPopulation = rset.getString("Not City Pop");
                 pops.add(pop);

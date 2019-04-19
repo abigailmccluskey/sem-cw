@@ -312,6 +312,18 @@ public class AppIntegrationTest {
         assertEquals(c, d);
     }
     @Test
+    void populationPerCountry(){
+        ArrayList<Population> populationPerCountry = app.populationPerCountry();
+
+        String a = populationPerCountry.get(0).pop;
+        String b = "22720000";
+        assertEquals(a, b);
+
+        String c = populationPerCountry.get(0).cityPopulation;
+        String d = "2332100";
+        assertEquals(c, d);
+    }
+    @Test
     void givens()
     {
         Given given = new Given();
