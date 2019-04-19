@@ -136,12 +136,12 @@ public class AppIntegrationTest {
     void citiesInWorldLtoS() {
         ArrayList<City> cities = app.citiesInWorldLtoS();
 
-        int a = 9981619;
-        int b = cities.get(1).population;
+        int a = 10500000;
+        int b = cities.get(0).population;
         assertEquals(a, b);
 
-        String c = "Seoul";
-        String d = cities.get(1).name;
+        String c = "Mumbai (Bombay)";
+        String d = cities.get(0).name;
 
         assertEquals(c, d);
     }
@@ -297,6 +297,72 @@ public class AppIntegrationTest {
 
         String c = populationPerContinent.get(0).cityPopulation;
         String d = "697604103";
+        assertEquals(c, d);
+    }
+    @Test
+    void givens()
+    {
+        Given given = new Given();
+        given = app.populationContinentRegionCountryDistrictCity("Africa", "Eastern Europe", "Poland", "Scotland", "Tokyo");
+
+        long world = 6078749450L;
+        long continent = 784475000;
+        int country = 38653600;
+
+        assertEquals(world, given.worldPopulation);
+        assertEquals(continent, given.continentPopulation);
+        assertEquals(country, given.countryPopulation);
+    }
+
+    @Test
+    void TopNpopulatedCapitalCitiesInRegion()
+    {
+        ArrayList<City> capitals = app.TopNpopulatedCapitalCitiesInRegion(5, "Eastern Europe");
+        String name1 = "Moscow";
+        int population1 = 8389200;
+
+        assertEquals(name1, capitals.get(0).name);
+        assertEquals(population1, capitals.get(0).population);
+    }
+
+    @Test
+    void languages()
+    {
+        ArrayList<countryLanguage> languages = app.languages();
+        String name1 = "Chinese";
+        double percentage = 19.0;
+        assertEquals(languages.get(0).Language, name1);
+        assertEquals(languages.get(0).Percentage, percentage);
+    }
+
+    @Test
+    void topNcountriesRegion()
+    {
+        ArrayList<Country> countries = app.topNcountriesRegion("Eastern Europe", 5);
+        Country country = countries.get(0);
+        String a = "Russian Federation";
+        String b = country.Name;
+        assertEquals(a, b);
+
+        String c = "Eastern Europe";
+        String d = country.Region;
+        assertEquals(c, d);
+
+        int e = country.Population;
+        int f = 146934000;
+        assertEquals(e,f);
+    }
+    @Test
+    void TopNCitiesCountry()
+    {
+        ArrayList<City> city = app.TopNCitiesCountry("South Africa", 5);
+
+        String a = city.get(0).name;
+        String b = "Cape Town";
+        assertEquals(a, b);
+
+        int c = city.get(0).population;
+        int d = 2352121;
         assertEquals(c, d);
     }
 }
