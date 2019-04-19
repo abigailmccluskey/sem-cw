@@ -300,6 +300,18 @@ public class AppIntegrationTest {
         assertEquals(c, d);
     }
     @Test
+    void populationPerRegion(){
+        ArrayList<Population> populationPerRegion = app.populationPerRegion();
+
+        String a = populationPerRegion.get(0).pop;
+        String b = "1490776000";
+        assertEquals(a, b);
+
+        String c = populationPerRegion.get(0).cityPopulation;
+        String d = "207688970";
+        assertEquals(c, d);
+    }
+    @Test
     void givens()
     {
         Given given = new Given();

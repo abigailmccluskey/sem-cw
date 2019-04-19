@@ -153,6 +153,26 @@ public class AppTest
     }
 
     @Test
+    public void displayRegionPop(){
+        ArrayList<Population> pops = new ArrayList<>();
+        Population pop1 = new Population();
+        Population pop2 = new Population();
+        pop1.region =  "Western Europe";
+        pop1.pop = "183247600";
+        pop1.cityPopulation = "45683298";
+        pop1.nonCityPopulation = "137564302";
+
+        pop2.region =  null;
+        pop2.pop = null;
+        pop2.cityPopulation = null;
+        pop2.nonCityPopulation = null;
+
+        pops.add(pop1);
+        pops.add(pop2);
+        app.displayRegionPop(pops);
+    }
+
+    @Test
     public void displayGiven()
     {
         Given given = new Given();

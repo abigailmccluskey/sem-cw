@@ -166,6 +166,12 @@ public class App {
         System.out.println("\nListing the population of the world, a given continent, a given region, a given country, a given district and a given city.");
         Given given = a.populationContinentRegionCountryDistrictCity("Africa", "Eastern Europe", "Poland", "Scotland", "Tokyo");
         a.displayGivens(given);
+
+        //Listing the population of people, people in cities, and people not living in cities in each region
+        System.out.println("\nListing the population of people, people in cities, and people not living in cities in each region.");
+        ArrayList<Population> populationPerRegion = a.populationPerRegion();
+        a.displayRegionPop(populationPerRegion);
+
         //Disconnect from database
         a.disconnect();
     }
@@ -278,6 +284,16 @@ public class App {
             String emp_string =
                     String.format("%-15s %-20s %-15s %-20s",
                             pop.continent, pop.pop, pop.cityPopulation, pop.nonCityPopulation);
+            System.out.println(emp_string);
+        }
+    }
+
+    public void displayRegionPop(ArrayList<Population> pops){
+        System.out.println(String.format("%-25s %-20s %-15s %-20s","Region", "Region Pop", "City Pop", "Not City Pop"));
+        for (Population pop : pops) {
+            String emp_string =
+                    String.format("%-25s %-20s %-15s %-20s",
+                            pop.region, pop.pop, pop.cityPopulation, pop.nonCityPopulation);
             System.out.println(emp_string);
         }
     }
@@ -1190,4 +1206,41 @@ public class App {
         }
     }
 
+    public ArrayList<Population> populationPerRegion(){
+        try {
+
+            ArrayList<Population> pops = new ArrayList<Population>();
+
+
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect = "SELECT A.Region, A.Cont AS 'RegionPop', B.City AS 'City', (A.Cont - B.City) AS 'Not City Pop' "
+                    + "FROM (SELECT Region, SUM(country.Population) AS 'Cont' FROM country GROUP BY Region) AS A, "
+                    + "(SELECT Region , SUM(city.Population) AS 'City' FROM country JOIN city ON city.CountryCode = country.Code GROUP BY Region) AS B "
+                    + "WHERE A.Region = B.Region";
+
+
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+
+            while (rset.next()) {
+                Population pop = new Population();
+                pop.region =  rset.getString("Region");
+                pop.pop = rset.getString("RegionPop");
+                pop.cityPopulation = rset.getString("City");
+                pop.nonCityPopulation = rset.getString("Not City Pop");
+                pops.add(pop);
+            }
+
+
+
+            return pops;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get details");
+            return null;
+        }
+    }
 }
