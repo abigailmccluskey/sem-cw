@@ -12,7 +12,7 @@
 
 ## Requirements Met
 
-> 29 of 32 requirements met, which is 90.6%
+> 32 of 32 requirements met, which is 100%
 
 | ID | Name | Met | Screenshot |
 |----|------|-----|------------|
