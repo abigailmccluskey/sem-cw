@@ -291,12 +291,12 @@ public class AppIntegrationTest {
     void populationPerContinent(){
         ArrayList<Population> populationPerContinent = app.populationPerContinent();
 
-        String a = populationPerContinent.get(0).continentPopulation;
-        String b = "1970128447000";
+        String a = populationPerContinent.get(0).pop;
+        String b = "3705025700";
         assertEquals(a, b);
 
         String c = populationPerContinent.get(0).cityPopulation;
-        String d = "52893715708";
+        String d = "697604103";
         assertEquals(c, d);
     }
 }

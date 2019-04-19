@@ -273,7 +273,7 @@ public class App {
         for (Population pop : pops) {
             String emp_string =
                     String.format("%-15s %-20s %-15s %-20s",
-                            pop.continent, pop.continentPopulation, pop.cityPopulation, pop.nonCityPopulation);
+                            pop.continent, pop.pop, pop.cityPopulation, pop.nonCityPopulation);
             System.out.println(emp_string);
         }
     }
@@ -930,10 +930,6 @@ public class App {
         }
     }
 
-
-
-
-
     public ArrayList<Population> populationPerContinent(){
         try {
 
@@ -943,10 +939,12 @@ public class App {
             // Create an SQL statement
             Statement stmt = con.createStatement();
             // Create string for SQL statement
-            String strSelect =
-                    "SELECT Continent, SUM(country.Population) AS 'Cont', SUM(city.Population) AS 'City', (SUM(country.Population) - SUM(city.Population)) AS 'Not City Pop' "
-                            + "FROM country, city "
-                            + "GROUP BY Continent";
+            String strSelect = "SELECT A.Continent, A.Cont AS 'Cont', B.City AS 'City', (A.Cont - B.City) AS 'Not City Pop' "
+                    + "FROM (SELECT Continent, SUM(country.Population) AS 'Cont' FROM country GROUP BY Continent) AS A, "
+                    + "(SELECT Continent , SUM(city.Population) AS 'City' FROM country JOIN city ON city.CountryCode = country.Code GROUP BY Continent) AS B "
+                    + "WHERE A.Continent = B.Continent";
+
+
 
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
@@ -955,7 +953,7 @@ public class App {
             while (rset.next()) {
                 Population pop = new Population();
                 pop.continent =  rset.getString("Continent");
-                pop.continentPopulation = rset.getString("Cont");
+                pop.pop = rset.getString("Cont");
                 pop.cityPopulation = rset.getString("City");
                 pop.nonCityPopulation = rset.getString("Not City Pop");
                 pops.add(pop);

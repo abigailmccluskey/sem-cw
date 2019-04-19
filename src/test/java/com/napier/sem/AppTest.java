@@ -99,12 +99,12 @@ public class AppTest
         Population pop1 = new Population();
         Population pop2 = new Population();
         pop1.continent =  "North America";
-        pop1.continentPopulation = "1970128447000";
-        pop1.cityPopulation = "52893715708";
-        pop1.nonCityPopulation = "1917234731292";
+        pop1.pop = "482993000";
+        pop1.cityPopulation = "168250381";
+        pop1.nonCityPopulation = "314742619";
 
         pop2.continent =  null;
-        pop2.continentPopulation = null;
+        pop2.pop = null;
         pop2.cityPopulation = null;
         pop2.nonCityPopulation = null;
 
